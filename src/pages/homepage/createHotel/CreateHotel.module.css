@@ -1,0 +1,77 @@
+.createHotelContainer {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.message {
+    text-align: center;
+    color: #a68b5b;
+    font-weight: bold;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input,
+textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    background: #a68b5b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #a47a47;
+}
+
+.submitButtonWrapper {
+    margin-top: 1rem;
+}
+
+.submitButton {
+    background-color: #a68b5b !important;
+    color: black !important;
+    padding: 0.75rem !important;
+    border-radius: 9999px !important;
+}
+
+.submitButton:hover {
+    background-color: #a47a47 !important;
+}
+
+.fileInput {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.backButton {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    color: #a68b5b;
+    cursor: pointer;
+}
+

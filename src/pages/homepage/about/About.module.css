@@ -1,0 +1,80 @@
+.aboutContainer {
+    font-family: 'Merriweather', serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.heroSection {
+    position: relative;
+    overflow: hidden;
+}
+
+.heroImage {
+    width: 100%;
+    height: 60vh;
+    object-fit: cover;
+    filter: brightness(65%);
+}
+
+.heroText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subTitle {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+
+.descriptionSection {
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 800px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+.sectionDescription,
+.inviteText {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.featuresTitle {
+    font-size: 1.75rem;
+    margin: 1rem 0;
+    color: #444;
+}
+
+.featuresList {
+    list-style-type: disc;
+    margin: 1rem 0 2rem 1.5rem;
+}
+
+.featuresList li {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #555;
+}
+ 

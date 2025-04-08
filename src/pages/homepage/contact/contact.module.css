@@ -1,0 +1,87 @@
+.contactContainer {
+    font-family: 'Georgia', serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.heroSection {
+    position: relative;
+    overflow: hidden;
+}
+
+.heroImage {
+    width: 100%;
+    height: 60vh;
+    object-fit: cover;
+    filter: brightness(60%);
+}
+
+.heroText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+}
+
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subTitle {
+    font-size: 1.2rem;
+}
+
+.contactSection {
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 800px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.imageWrapper {
+    margin: 1rem auto;
+}
+
+.contactImage {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.contactTitle,
+.phoneTitle,
+.emailTitle,
+.visitTitle {
+    font-size: 1.75rem;
+    margin: 1rem 0;
+    color: #555;
+}
+
+.contactDescription,
+.phoneDescription,
+.emailDescription,
+.visitDescription {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.contactDescription a {
+    color: #0077b6;
+    text-decoration: underline;
+}
+
+.contactDescription a:hover {
+    color: #005f8c;
+}

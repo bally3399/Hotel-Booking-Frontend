@@ -1,0 +1,145 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.backButtonWrapper {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: white;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    color: #a47a47;
+    cursor: pointer;
+    background-color: white;
+}
+
+.backButton:hover {
+    color: #a47a47;
+    background-color: white;
+
+}
+
+.backIcon {
+    margin-right: 0.5rem;
+}
+
+.formSection {
+    width: 30rem;
+    text-align: center;
+}
+
+.formContainer {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: black;
+}
+.formField {
+    margin-bottom: 16px;
+    color: black;
+    display: block;
+}
+
+.formField input:focus {
+    border-color: #a47a47 !important;
+}
+
+.inputField {
+    margin-bottom: 1rem;
+}
+
+.submitButtonWrapper {
+    margin-top: 1rem;
+}
+
+.submitButton {
+    background-color: #a47a47 !important;
+    color: black !important;
+    padding: 0.75rem !important;
+    border-radius: 9999px !important;
+}
+
+.submitButton:hover {
+    background-color: #a47a47 !important;
+}
+
+.loginRedirect {
+    text-align: center;
+    margin-top: 16px;
+    color: #6b5b4b;
+}
+
+.loginLink {
+
+    color: #6b5b4b;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.loginLink:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .formSection {
+        width: 100%;
+    }
+
+    .formContainer {
+        padding: 1.5rem;
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+
+    .submitButton {
+        padding: 0.6rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .formContainer {
+        padding: 1.2rem;
+        max-width: 90%;
+    }
+
+    .title {
+        font-size: 1.2rem;
+    }
+
+    .submitButton {
+        padding: 0.5rem !important;
+    }
+
+    .backButtonWrapper {
+        top: 0.5rem;
+        left: 0.5rem;
+    }
+}

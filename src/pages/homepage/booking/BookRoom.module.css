@@ -1,0 +1,60 @@
+.roomContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    background-color: white;
+    background-size: cover;
+}
+
+.backButton {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    color: #a68b5b;
+    cursor: pointer;
+}
+
+.roomCard {
+    background-color: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 32px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.roomTitle {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    color: #a68b5b;
+    margin-bottom: 24px;
+}
+
+.formField {
+    margin-bottom: 16px;
+    color: black;
+    display: block;
+}
+
+.errorText {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.submitButton {
+    margin-top: 24px;
+    background-color: #a68b5b !important;
+    color: black !important;
+}
+
+@media (max-width: 600px) {
+    .roomContainer{
+        width: 90%;
+    }
+}

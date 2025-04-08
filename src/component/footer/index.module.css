@@ -1,0 +1,20 @@
+.footer {
+    background-color: var(--wine-color);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+}
+
+.footer__container{
+    padding: 1rem 0;
+    text-align: center;
+}
+
+
+.footer__copy {
+    display: block;
+    color: #a68b5b;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: var(--smaller-font-size);
+}
+
