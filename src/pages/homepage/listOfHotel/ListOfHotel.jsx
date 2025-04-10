@@ -1,33 +1,32 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import HotelCard from "../../../component/hotelCard/hotelCard.jsx";
+import HotelData from "../../../component/hotelCard/hotelData.js";
+import {useNavigate} from "react-router-dom";
 
 const ListOfHotelPage = () => {
-    const [hotels, setHotels] = useState([]);
+    const navigate = useNavigate();
+    // const [hotels, setHotels] = useState([]);
+    //
+    // useEffect(() => {
+    //     const fetchHotels = async () => {
+    //         try {
+    //             const response = await axios.get("/api/v1/hotels/list");
+    //             setHotels(response.data);
+    //         } catch (error) {
+    //             console.error("Error fetching hotels:", error);
+    //         }
+    //     };
+    //     fetchHotels();
+    // }, []);
 
-    useEffect(() => {
-        const fetchHotels = async () => {
-            try {
-                const response = await axios.get("/api/v1/hotels/list");
-                setHotels(response.data);
-            } catch (error) {
-                console.error("Error fetching hotels:", error);
-            }
-        };
-        fetchHotels();
-    }, []);
+    const  onClick  = (hotelData)=>{
+        navigate("/hotel_details", { state: {hotelData: hotelData } })
+    }
 
     return (
-        <div>
-            <h1>List of Hotels</h1>
-            {hotels.length > 0 ? (
-                <ul>
-                    {hotels.map((hotel) => (
-                        <li key={hotel.id}>{hotel.name} - {hotel.location}</li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No hotels found.</p>
-            )}
+        <div className="flex flex-wrap justify-center gap-25 px-4 py-6">
+            {HotelData.map((hotel) => (
+                <HotelCard key={hotel.id} data={hotel} onClick={()=>onClick(hotel)}/>
+            ))}
         </div>
     );
 };

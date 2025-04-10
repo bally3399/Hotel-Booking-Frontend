@@ -9,11 +9,8 @@ import Image5 from "../../../assets/Vector (4).png"
 import Image6 from "../../../assets/Vector (5).png"
 import Image7 from "../../../assets/Vector (6).png"
 import Image8 from "../../../assets/Vector (7).png"
-import room1 from "../../../assets/Rectangle 10.png"
-import room2 from "../../../assets/Rectangle 10 (1).png"
-import room3 from "../../../assets/Rectangle 10 (2).png"
-import {Link} from "react-router-dom";
-import Footer from "../../../component/footer";
+
+import ListOfHotel from "../listOfHotel/ListOfHotel.jsx";
 
 const facilities = [
     { id: 1, name: "Swimming Pool", image: Image },
@@ -26,32 +23,9 @@ const facilities = [
     { id: 8, name: "Parking space", image: Image8 },
 ];
 
-const rooms = [
-    {
-        id: 1,
-        image: room1,
-        availability: "2 rooms available",
-        description: "Television set, Extra sheets and Breakfast",
-    },
-    {
-        id: 2,
-        image: room2,
-        availability: "4 rooms available",
-        description: "Television set, Extra sheets, Breakfast, and fireplace",
-    },
-    {
-        id: 3,
-        image: room3,
-        availability: "8 rooms available",
-        description: "Television set, Extra sheets, Breakfast, fireplace, Console, and bed rest",
-    },
-];
-
-
 const HeroPage = () => {
     return (
         <main className={styles.main}>
-            <Navbar/>
             <div className={styles.heroContainer}>
                 <div className={styles.textSection}>
                     <h2 className={styles.subTitle}>Fortunae IT Hotel Booking App</h2>
@@ -76,31 +50,6 @@ const HeroPage = () => {
                 </div>
             </div>
 
-            <div className={styles.bookingSection}>
-                <div className={styles.bookingGrid}>
-                    <select className={styles.inputField}>
-                        <option>Location</option>
-                        <option>Abuja</option>
-                        <option>Lagos</option>
-                    </select>
-                    <select className={styles.inputField}>
-                        <option>Room Type</option>
-                        <option>Standard</option>
-                        <option>Deluxe</option>
-                    </select>
-                    <select className={styles.inputField}>
-                        <option>Person</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>4+</option>
-                    </select>
-                    <input type="date" className={styles.inputField}/>
-                    <input type="date" className={styles.inputField}/>
-                    <Link to={'/rooms'}>
-                        <button className={styles.bookNowButton}>Book Now</button>
-                    </Link>
-                </div>
-            </div>
             <section className={styles.facilitiesSection}>
                 <h2 className={styles.title}>Our Facilities</h2>
                 <p className={styles.subtitle}>
@@ -117,24 +66,13 @@ const HeroPage = () => {
                 </div>
             </section>
             <section className={styles.roomsSection}>
-            <h2 className={styles.title}>Luxurious Rooms</h2>
+            <h2 className={styles.title}>Luxurious Hotels</h2>
             <p className={styles.subtitle}>
                 All rooms are designed for your comfort.
             </p>
 
-            <div className={styles.roomsGrid}>
-                {rooms.map((room) => (
-                    <div key={room.id} className={styles.roomCard}>
-                        <div className={styles.imageWrapper}>
-                            <img src={room.image} alt="Room" className={styles.roomImage} />
-                            <span className={styles.availability}>{room.availability}</span>
-                        </div>
-                        <p className={styles.description}>{room.description}</p>
-                    </div>
-                ))}
-            </div>
+            <ListOfHotel/>
         </section>
-       <Footer/>
     </main>
     );
 };

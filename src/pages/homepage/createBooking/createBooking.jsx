@@ -43,7 +43,6 @@ const CreateBooking = () => {
 
   return (
     <main>
-      <Navbar />
       <div className={styles.createBooking}>
         <h2>Create Booking</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -79,7 +78,6 @@ const CreateBooking = () => {
           </button>
         </form>
       </div>
-      <Footer />
     </main>
   );
 };

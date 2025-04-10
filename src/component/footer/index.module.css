@@ -1,7 +1,7 @@
 .footer {
     background-color: var(--wine-color);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-
+    margin-top: 3rem;
 }
 
 .footer__container{
