@@ -42,7 +42,11 @@ const Navbar = () => {
     const isPublicPage =
         location.pathname !== "/" &&
         location.pathname !== "/register" &&
-        location.pathname !== "/login";
+        location.pathname !== "/login" &&
+        location.pathname !== "/about" &&
+        location.pathname !== "/contact" &&
+        location.pathname !== "/tour";
+
 
     return (
         <nav className={styles.navbar}>

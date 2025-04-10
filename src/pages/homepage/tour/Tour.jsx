@@ -7,7 +7,6 @@ import bus from "../../../assets/aron-van-de-pol-tZDtyUrYrFU-unsplash.jpg";
 const TourPage = () => {
     return (
         <main>
-            <Navbar />
             <div className={styles.tourContainer}>
                 <header className={styles.heroSection}>
                     <img src={clock} alt="Big Ben" className={styles.heroImage} />
@@ -45,7 +44,6 @@ const TourPage = () => {
                     </p>
                 </section>
             </div>
-            <Footer />
         </main>
     );
 };
