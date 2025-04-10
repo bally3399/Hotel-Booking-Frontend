@@ -109,7 +109,7 @@ const CreateHotel = () => {
                 amenities: "",
                 pictures: [],
             });
-            navigate("/rooms");
+            navigate("/hotels");
         } catch (error) {
             setMessage(`Failed to add hotel: ${error.response?.data?.message || error.message}`);
         }
@@ -223,7 +223,7 @@ const CreateHotel = () => {
                             className={styles.submitButton}
                             fullWidth
                         >
-                            Create Hotel
+                            Add Hotel
                         </Button>
                     </div>
                 </form>
