@@ -1,34 +1,50 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { TextField, Button } from "@mui/material";
 import styles from "./CreateHotel.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import {HiArrowLeft} from "react-icons/hi";
+import { HiArrowLeft } from "react-icons/hi";
 
-const API_URL = "http://hotel-api.fortunaelibrary-api.com/api";
+const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
 const CreateHotel = () => {
-    const [roomData, setRoomData] = useState({
+    const [hotelData, setHotelData] = useState({
         name: "",
-        state: "",
         location: "",
         description: "",
         amenities: "",
-        picture: [],
+        pictures: [],
     });
 
     const [message, setMessage] = useState("");
+    const [pictureUrl, setPictureUrl] = useState("");
     const navigate = useNavigate();
-    const fileInputRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setRoomData({ ...roomData, [name]: value });
+        setHotelData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleFileChange = (e) => {
-        setRoomData({ ...roomData, picture: Array.from(e.target.files) });
+    const handlePictureUrlChange = (e) => {
+        setPictureUrl(e.target.value);
+    };
+
+    const addPictureUrl = () => {
+        if (pictureUrl.trim()) {
+            setHotelData(prev => ({
+                ...prev,
+                pictures: [...prev.pictures, pictureUrl.trim()]
+            }));
+            setPictureUrl("");
+        }
+    };
+
+    const removePictureUrl = (index) => {
+        setHotelData(prev => ({
+            ...prev,
+            pictures: prev.pictures.filter((_, i) => i !== index)
+        }));
     };
 
     const inputStyles = {
@@ -61,130 +77,145 @@ const CreateHotel = () => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("name", roomData.name);
-        formData.append("state", roomData.state);
-        formData.append("location", roomData.location);
-        formData.append("description", roomData.description);
-        formData.append("amenities", roomData.amenities);
-
-        roomData.picture.forEach((file) => {
-            formData.append("picture", file);
-        });
+        const payload = {
+            name: hotelData.name,
+            location: hotelData.location,
+            description: hotelData.description,
+            amenities: hotelData.amenities.split(",").map(item => item.trim()),
+            pictures: hotelData.pictures,
+        };
 
         try {
             const response = await axios.post(
-                `${API_URL}/v1/hotel/create`,
-                formData,
+                `${API_URL}/api/v1/admin/hotels`,
+                payload,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data",
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                         Accept: "*/*",
                     },
                 }
             );
-            console.log("Hotel added:", response.data);
-            setMessage("Hotel added successfully!");
 
-            setRoomData({
+            setMessage("Hotel added successfully!");
+            setHotelData({
                 name: "",
-                state: "",
                 location: "",
                 description: "",
                 amenities: "",
-                picture: [],
+                pictures: [],
             });
-
-            navigate("/rooms");
+            navigate("/hotels");
         } catch (error) {
-            setMessage("Failed to add hotel. Try again.");
+            setMessage(`Failed to add hotel: ${error.response?.data?.message || error.message}`);
         }
     };
 
     return (
         <main>
-            <div className={styles.backButton} onClick={() => navigate("/admin-dashboard")}>
+            <div
+                className={styles.backButton}
+                onClick={() => navigate("/admin-dashboard")}
+            >
                 <HiArrowLeft className="mr-2"/> Back
             </div>
-    <div className={styles.createHotelContainer}>
-        <h2>Add a new Hotel</h2>
-        {message && <p className={styles.message}>{message}</p>}
-            <form onSubmit={handleSubmit}>
-                <TextField
-                    label="Name"
-                    name="name"
-                    value={roomData.name}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                    margin="normal"
-                    sx={inputStyles}
-                />
-                <TextField
-                    label="State"
-                    name="state"
-                    value={roomData.state}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                    margin="normal"
-                    sx={inputStyles}
-                />
-                <TextField
-                    label="Location"
-                    name="location"
-                    value={roomData.location}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                    margin="normal"
-                    sx={inputStyles}
-                />
-                <TextField
-                    label="Description"
-                    name="description"
-                    value={roomData.description}
-                    onChange={handleChange}
-                    multiline
-                    rows={2}
-                    fullWidth
-                    required
-                    margin="normal"
-                    sx={inputStyles}
-                />
-                <TextField
-                    label="Amenities"
-                    name="amenities"
-                    value={roomData.amenities}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                    margin="normal"
-                    sx={inputStyles}
-                />
-
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    multiple
-                    required
-                    className={styles.fileInput}
-                    ref={fileInputRef}
-                />
-                <div className={styles.submitButtonWrapper}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        className={styles.submitButton}
+            <div className={styles.createHotelContainer}>
+                <h2>Add a New Hotel</h2>
+                {message && <p className={styles.message}>{message}</p>}
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        label="Name"
+                        name="name"
+                        value={hotelData.name}
+                        onChange={handleChange}
                         fullWidth
-                    >
-                        Create Hotel
-                    </Button>
-                </div>
-            </form>
-        </div>
+                        required
+                        margin="normal"
+                        sx={inputStyles}
+                    />
+
+                    <TextField
+                        label="Location"
+                        name="location"
+                        value={hotelData.location}
+                        onChange={handleChange}
+                        fullWidth
+                        required
+                        margin="normal"
+                        sx={inputStyles}
+                    />
+                    <TextField
+                        label="Description"
+                        name="description"
+                        value={hotelData.description}
+                        onChange={handleChange}
+                        multiline
+                        rows={2}
+                        fullWidth
+                        required
+                        margin="normal"
+                        sx={inputStyles}
+                    />
+                    <TextField
+                        label="Amenities (comma-separated)"
+                        name="amenities"
+                        value={hotelData.amenities}
+                        onChange={handleChange}
+                        fullWidth
+                        required
+                        margin="normal"
+                        sx={inputStyles}
+                        helperText="Example: wifi, pool, parking"
+                    />
+                    <div className={styles.pictureSection}>
+                        <TextField
+                            label="Picture URL"
+                            value={pictureUrl}
+                            onChange={handlePictureUrlChange}
+                            fullWidth
+                            margin="normal"
+                            sx={inputStyles}
+                        />
+                        <Button
+                            variant="outlined"
+                            onClick={addPictureUrl}
+                            className={styles.addPictureButton}
+                        >
+                            Add
+                        </Button>
+                    </div>
+                    {hotelData.pictures.length > 0 && (
+                        <div className={styles.pictureList}>
+                            <h4>Added Pictures:</h4>
+                            <ul>
+                                {hotelData.pictures.map((url, index) => (
+                                    <li key={index} className={styles.pictureItem}>
+                                        {url}
+                                        <Button
+                                            size="small"
+                                            color="error"
+                                            onClick={() => removePictureUrl(index)}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <div className={styles.submitButtonWrapper}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            className={styles.submitButton}
+                            fullWidth
+                        >
+                            Add Hotel
+                        </Button>
+                    </div>
+                </form>
+            </div>
         </main>
     );
 };

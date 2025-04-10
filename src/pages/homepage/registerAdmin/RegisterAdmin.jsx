@@ -53,7 +53,7 @@ const RegisterAdmin = () => {
                 username: form.username,
                 email: form.email,
                 password: form.password,
-                role: "USER",
+                role: "ADMIN",
             };
 
 
