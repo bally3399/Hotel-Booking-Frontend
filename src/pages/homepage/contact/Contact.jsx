@@ -7,7 +7,6 @@ import street from "../../../assets/sabrina-mazzeo-g-krQzQo9mI-unsplash.jpg";
 const ContactPage = () => {
     return (
         <main>
-            <Navbar />
             <div className={styles.contactContainer}>
                 <header className={styles.heroSection}>
                     <img src={street} alt="Charming UK Street" className={styles.heroImage} />
@@ -46,7 +45,6 @@ const ContactPage = () => {
                     </p>
                 </section>
             </div>
-            <Footer />
         </main>
     );
 };

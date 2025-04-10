@@ -19,6 +19,7 @@ import HotelCard from "../component/hotelCard/hotelCard";
 import HeroPage from "../pages/homepage/heroPage/HeroPage.jsx";
 import RoomCard from "../component/roomCard/roomCard.jsx";
 import HotelDetails from "../pages/homepage/hotelDetails/hotelDetails.jsx";
+import Payment from "../component/payment/payment.jsx";
 
 
 
@@ -108,6 +109,10 @@ export const ROUTES = [
             {
                 path: "/contact",
                 element: <ContactPage/>
+            },
+            {
+                path: "/payment",
+                element: <Payment/>
             },
             {
                 path: "/room_card",

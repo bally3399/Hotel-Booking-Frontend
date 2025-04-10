@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+
+
 
 const RoomBookingPage = () => {
     const [showAllImages, setShowAllImages] = useState(false);
@@ -10,7 +12,10 @@ const RoomBookingPage = () => {
     const toggleImageDisplay = () => {
         setShowAllImages(!showAllImages);
     };
-
+    const navigate = useNavigate();
+    const handlePay = () =>{
+        navigate("/payment",{state:{price:price}})
+    }
     const renderImages = () => {
         const   images  = roomData;
 
@@ -111,11 +116,8 @@ const RoomBookingPage = () => {
                     <span className="text-2xl font-semibold">Price:</span>&nbsp;&nbsp;
                     £{price}
                 </p>
-                <button
-                    onClick={() => toast.success("Booking confirmed!")}
-                    className="bg-blue-500 text-white py-2 px-4 mt-4 rounded"
-                >
-                    Confirm Booking
+                <button className="bg-blue-500 text-white py-2 px-4 mt-4 rounded" onClick={handlePay}>
+                    book room
                 </button>
             </div>
 
