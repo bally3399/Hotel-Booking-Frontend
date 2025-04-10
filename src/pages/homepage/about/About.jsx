@@ -6,7 +6,6 @@ import image from "../../../assets/nick-fewings-y66uqwAT8N8-unsplash.jpg";
 const About = () => {
     return (
         <main>
-            <Navbar />
             <div className={styles.aboutContainer}>
                 <header className={styles.heroSection}>
                     <img src={image} alt="Luxury British Room" className={styles.heroImage} />
@@ -41,7 +40,6 @@ const About = () => {
                     </p>
                 </section>
             </div>
-            <Footer />
         </main>
     );
 };

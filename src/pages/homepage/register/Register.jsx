@@ -1,29 +1,20 @@
 import React, { useState } from "react";
-import {
-    TextField,
-    Checkbox,
-    FormControlLabel,
-    Button,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Select,
-} from "@mui/material";
+import {TextField, Checkbox, FormControlLabel, Button, MenuItem, FormControl, InputLabel, Select} from "@mui/material";
 import { HiArrowLeft } from "react-icons/hi";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "../register/Register.module.css";
+import styles from "../register/Register.module.css"
 
-const GetStarted = () => {
+
+const RegisterAdmin = () => {
     const [form, setForm] = useState({
         username: "",
         email: "",
         password: "",
         confirmPassword: "",
-        role: "",
-        agree: false,
+        role: ""
     });
 
     const navigate = useNavigate();
@@ -39,53 +30,42 @@ const GetStarted = () => {
     };
 
     const validateForm = () => {
-        const newErrors = {};
-
-        if (!form.username.trim()) newErrors.username = "Username is required";
-        if (!form.email.trim()) newErrors.email = "Email is required";
-        if (!form.password) newErrors.password = "Password is required";
-        if (!form.confirmPassword)
-            newErrors.confirmPassword = "Please confirm your password";
-        if (form.password && form.confirmPassword && form.password !== form.confirmPassword)
-            newErrors.confirmPassword = "Passwords do not match";
-        if (!form.role) newErrors.role = "Please select a role";
-        if (!form.agree)
-            newErrors.agree = "You must agree to the terms and conditions";
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        let formErrors = {};
+        if (form.password !== form.confirmPassword) {
+            formErrors.confirmPassword = "Passwords do not match";
+        }
+        if (!form.agree) {
+            formErrors.agree = "You must agree to the terms and conditions";
+        }
+        setErrors(formErrors);
+        return Object.keys(formErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
-
         setIsLoading(true);
-        const payload = {
-            username: form.username,
-            email: form.email,
-            password: form.password,
-            role: form.role,
-        };
 
-        const url =
-            form.role === "Admin"
-                ? "https://hotel-booking-backend-2sa9.onrender.com/api/auth/admin/register"
-                : "https://hotel-booking-backend-2sa9.onrender.com/api/auth/user/register";
+        const endpoint = "https://hotel-booking-management-backend.onrender.com/api/v1/admin/register";
 
         try {
-            const response = await axios.post(url, payload, {
+            const payload = {
+                username: form.username,
+                email: form.email,
+                password: form.password,
+                role: "USER",
+            };
+
+
+            const response = await axios.post(endpoint, payload, {
                 headers: { "Content-Type": "application/json" },
             });
-
-            if (response.data === "User registered successfully") {
-                toast.success(
-                    `Welcome ${form.username}, you have signed up successfully!`
-                );
+            console.log(response.data);
+            if (response.data.success ===   true) {
+                toast.success(`Welcome ${form.username}, you have signed up successfully!`);
                 setTimeout(() => navigate("/login"), 3000);
-            } else if (response.status === 200) {
-                toast.success(`${form.role} created successfully!`);
-                navigate("/login");
+            } else {
+                toast.error("Sign up failed. Please try again.");
             }
         } catch (error) {
             toast.error("Sign up failed. Please try again.");
@@ -102,116 +82,51 @@ const GetStarted = () => {
             <div className={styles.regCard}>
                 <h2 className={styles.regTitle}>Sign up</h2>
                 <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Username"
-                        name="username"
-                        value={form.username}
-                        onChange={handleChange}
-                        fullWidth
-                        error={!!errors.username}
-                        helperText={errors.username}
-                        sx={{
-                            marginBottom: "16px",
-                            "& label.Mui-focused": { color: "#a47a47" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a47a47" },
-                                "&.Mui-focused fieldset": { borderColor: "#a47a47" },
-                            },
-                        }}
+                    <TextField label="Username" name="username" value={form.username} onChange={handleChange} fullWidth
+                               className={styles.formField} sx={{
+                        "& label.Mui-focused": {color: "#a47a47"},
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {borderColor: "black"},
+                            "&:hover fieldset": {borderColor: "#a47a47"},
+                            "&.Mui-focused fieldset": {borderColor: "#a47a47"},
+                        },
+                        marginBottom: "16px",
+                    }}
                     />
+                    <TextField label="Email" name="email" type="email" value={form.email} onChange={handleChange}
+                               fullWidth className={styles.formField} sx={{
+                        "& label.Mui-focused": {color: "#a47a47"},
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {borderColor: "black"},
+                            "&:hover fieldset": {borderColor: "#a47a47"},
+                            "&.Mui-focused fieldset": {borderColor: "#a47a47"},
+                        },
+                        marginBottom: "16px",
+                    }}/>
+                    <TextField label="Password" name="password" type="password" value={form.password}
+                               onChange={handleChange} fullWidth className={styles.formField} sx={{
+                        "& label.Mui-focused": {color: "#a47a47"},
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {borderColor: "black"},
+                            "&:hover fieldset": {borderColor: "#a47a47"},
+                            "&.Mui-focused fieldset": {borderColor: "#a47a47"},
+                        },
+                        marginBottom: "16px",
 
-                    <TextField
-                        label="Email"
-                        name="email"
-                        type="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        fullWidth
-                        error={!!errors.email}
-                        helperText={errors.email}
-                        sx={{
-                            marginBottom: "16px",
-                            "& label.Mui-focused": { color: "#a47a47" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a47a47" },
-                                "&.Mui-focused fieldset": { borderColor: "#a47a47" },
-                            },
-                        }}
+                    }}
                     />
-
-                    <TextField
-                        label="Password"
-                        name="password"
-                        type="password"
-                        value={form.password}
-                        onChange={handleChange}
-                        fullWidth
-                        error={!!errors.password}
-                        helperText={errors.password}
-                        sx={{
-                            marginBottom: "16px",
-                            "& label.Mui-focused": { color: "#a47a47" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a47a47" },
-                                "&.Mui-focused fieldset": { borderColor: "#a47a47" },
-                            },
-                        }}
+                    <TextField label="Confirm Password" name="confirmPassword" type="password"
+                               value={form.confirmPassword} onChange={handleChange} fullWidth
+                               className={styles.formField} sx={{
+                        "& label.Mui-focused": {color: "#a47a47"},
+                        "& .MuiOutlinedInput-root": {
+                            "& fieldset": {borderColor: "black"},
+                            "&:hover fieldset": {borderColor: "#a47a47"},
+                            "&.Mui-focused fieldset": {borderColor: "#a47a47"},
+                        },
+                        marginBottom: "16px",
+                    }}
                     />
-
-                    <TextField
-                        label="Confirm Password"
-                        name="confirmPassword"
-                        type="password"
-                        value={form.confirmPassword}
-                        onChange={handleChange}
-                        fullWidth
-                        error={!!errors.confirmPassword}
-                        helperText={errors.confirmPassword}
-                        sx={{
-                            marginBottom: "16px",
-                            "& label.Mui-focused": { color: "#a47a47" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a47a47" },
-                                "&.Mui-focused fieldset": { borderColor: "#a47a47" },
-                            },
-                        }}
-                    />
-
-                    <FormControl
-                        fullWidth
-                        error={!!errors.role}
-                        sx={{
-                            marginBottom: "16px",
-                            "& label.Mui-focused": { color: "#a47a47" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a47a47" },
-                                "&.Mui-focused fieldset": { borderColor: "#a47a47" },
-                            },
-                        }}
-                    >
-                        <InputLabel id="role-label">Role</InputLabel>
-                        <Select
-                            labelId="role-label"
-                            name="role"
-                            value={form.role}
-                            onChange={handleChange}
-                            label="Role"
-                        >
-                            <MenuItem value="Admin">Admin</MenuItem>
-                            <MenuItem value="User">User</MenuItem>
-                        </Select>
-                        {errors.role && (
-                            <p style={{ color: "#d32f2f", marginTop: "4px", fontSize: "0.75rem" }}>
-                                {errors.role}
-                            </p>
-                        )}
-                    </FormControl>
-
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -220,44 +135,32 @@ const GetStarted = () => {
                                 onChange={handleChange}
                                 sx={{
                                     color: "#a47a47",
-                                    "&.Mui-checked": { color: "#a47a47" },
+                                    "&.Mui-checked": {color: "#a47a47"}
                                 }}
                             />
                         }
                         label="I agree to the terms and conditions"
                     />
-                    {errors.agree && (
-                        <p style={{ color: "#d32f2f", marginTop: "4px", fontSize: "0.75rem" }}>
-                            {errors.agree}
-                        </p>
-                    )}
+                    {errors.agree && <p className={styles.errorText}>{errors.agree}</p>}
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        disabled={isLoading}
-                        className={styles.submitButton}
-                    >
+                    <Button type="submit" variant="contained" fullWidth disabled={isLoading}
+                            className={styles.submitButton}>
                         {isLoading ? "Signing Up..." : "Sign Up"}
                     </Button>
-
                     <div className={styles.loginRedirect}>
                         <p>
                             Already signed in?{" "}
-                            <span
-                                onClick={() => navigate("/login")}
-                                className={styles.loginLink}
-                            >
+                            <span onClick={() => navigate("/login")} className={styles.loginLink}>
                                 Login
                             </span>
                         </p>
                     </div>
+
                 </form>
-                <ToastContainer position="top-right" autoClose={3000} />
+                <ToastContainer position="top-right" autoClose={3000}/>
             </div>
         </div>
     );
 };
 
-export default GetStarted;
+export default RegisterAdmin;

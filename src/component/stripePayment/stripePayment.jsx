@@ -1,14 +1,10 @@
-import React, { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const stripePromise = loadStripe("your-publishable-key");
-
 // Payment Form Component
-const PaymentForm = ({ amount }) => {
+const PaymentForm = ({ amount,price }) => {
     const stripe = useStripe();
     const elements = useElements();
 
@@ -46,7 +42,7 @@ const PaymentForm = ({ amount }) => {
         <form onSubmit={handleSubmit}>
             <CardElement />
             <button type="submit" disabled={!stripe} className="bg-blue-500 text-white py-2 px-4 mt-4 rounded">
-                Pay Now
+                Pay £{price}
             </button>
         </form>
     );
