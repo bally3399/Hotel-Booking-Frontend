@@ -61,7 +61,7 @@ const Dashboard = () => {
 
     return (
         <main>
-            <Navbar />
+            {/*<Navbar />*/}
             <div className={styles.dashboard}>
                 {loading && <div className={styles.loading}>Loading...</div>}
 
@@ -172,7 +172,7 @@ const Dashboard = () => {
                     </button>
                 </div>
             </div>
-            <Footer />
+            {/*<Footer />*/}
         </main>
     );
 };

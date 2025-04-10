@@ -11,7 +11,6 @@ const API_URL = "https://hotel-booking-management-backend.onrender.com";
 const CreateHotel = () => {
     const [hotelData, setHotelData] = useState({
         name: "",
-        state: "",
         location: "",
         description: "",
         amenities: "",
@@ -80,7 +79,6 @@ const CreateHotel = () => {
 
         const payload = {
             name: hotelData.name,
-            state: hotelData.state,
             location: hotelData.location,
             description: hotelData.description,
             amenities: hotelData.amenities.split(",").map(item => item.trim()),
@@ -103,7 +101,6 @@ const CreateHotel = () => {
             setMessage("Hotel added successfully!");
             setHotelData({
                 name: "",
-                state: "",
                 location: "",
                 description: "",
                 amenities: "",
@@ -137,16 +134,7 @@ const CreateHotel = () => {
                         margin="normal"
                         sx={inputStyles}
                     />
-                    <TextField
-                        label="State"
-                        name="state"
-                        value={hotelData.state}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        margin="normal"
-                        sx={inputStyles}
-                    />
+
                     <TextField
                         label="Location"
                         name="location"
