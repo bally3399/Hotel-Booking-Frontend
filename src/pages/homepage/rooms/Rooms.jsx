@@ -5,6 +5,7 @@ import Scroll from "../../../assets/scroll down.png";
 import Image from "../../../assets/rooms.png";
 import { FaShower, FaTv, FaWifi } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import ListOfHotel from "../listOfHotel/ListOfHotel.jsx";
 
 
 const rooms = [
@@ -97,13 +98,12 @@ const RoomsPage = () => {
 
     return (
         <main>
-            <Navbar />
             <div className={styles.roomContainer}>
-                <h1 className={styles.title}>Rooms and suites</h1>
+                <h1 className={styles.title}>Hotels and Rooms</h1>
                 <p className={styles.subTitle}>
                     The elegant luxury bedrooms in this gallery showcase custom interior
                     designs & decorating ideas. View pictures and find your
-                    perfect luxury bedroom design.
+                    perfect luxury bedroom design in the hotels.
                 </p>
                 <img
                     className={styles.image}
@@ -113,29 +113,7 @@ const RoomsPage = () => {
                     style={{ cursor: "pointer" }}
                 />
             </div>
-            <section ref={roomsRef} className={styles.roomsContainer}>
-                {rooms.map((room) => (
-                    <div key={room.id} className={styles.container}>
-                        <img src={room.image} alt={room.title} className="room-image" />
-                        <div className={styles.content}>
-                            <h2 className={styles.roomTitle}>{room.title}</h2>
-                            <p className={styles.roomPrice}>{room.price}</p>
-                            <p className={styles.roomAvailability}>Available: {room.available}</p>
-
-                            <div className={styles.roomFooter}>
-                                <div className={styles.roomIcons}>
-                                    <FaTv />
-                                    <FaShower />
-                                    <FaWifi />
-                                </div>
-                                <Link to={"/roomDetails"}>
-                                    <button  className={styles.roomButton}>Book Now</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </section>
+            <ListOfHotel/>
         </main>
     );
 };

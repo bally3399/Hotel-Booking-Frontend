@@ -16,91 +16,109 @@ import CreateBooking from "../pages/homepage/createBooking/createBooking";
 import EditBooking from "../pages/homepage/editBooking/editBooking";
 import ContactPage from "../pages/homepage/contact/Contact";
 import HotelCard from "../component/hotelCard/hotelCard";
+import HeroPage from "../pages/homepage/heroPage/HeroPage.jsx";
+import RoomCard from "../component/roomCard/roomCard.jsx";
+import HotelDetails from "../pages/homepage/hotelDetails/hotelDetails.jsx";
 
 
 
 
 export const ROUTES = [
     {
-        path:"/",
+        path: "/",
         element: <Layout/>,
-    },
+        children: [
 
-    {
-        path:"/register",
-        element: <Register/>,
-    },
+            {
+                path: "/",
+                element: <HeroPage/>,
+            },
+
+            {
+                path: "/register",
+                element: <Register/>,
+            },
 
 
-    {
-        path:"/login",
-        element: <Login/>,
-    },
+            {
+                path: "/login",
+                element: <Login/>,
+            },
 
-    {
-        path:"/book",
-        element: <BookRoomPage/>,
-    },
-    {
-        path:"/rooms",
-        element: <RoomsPage/>,
-    },
-    {
-        path:"/tour",
-        element: <TourPage/>,
-    },
-    {
-        path:"/create-hotel",
-        element: <CreateHotel/>,
-    },
+            {
+                path: "/book",
+                element: <BookRoomPage/>,
+            },
+            {
+                path: "/rooms",
+                element: <RoomsPage/>,
+            },
+            {
+                path: "/tour",
+                element: <TourPage/>,
+            },
+            {
+                path: "/create-hotel",
+                element: <CreateHotel/>,
+            },
 
-    {
-        path:"/admin-dashboard",
-        element: <AdminDashboard/>,
-    },
+            {
+                path: "/admin-dashboard",
+                element: <AdminDashboard/>,
+            },
 
-    {
-        path: "/user-dashboard",
-        element: <UserDashboard/>,
-    },
+            {
+                path: "/user-dashboard",
+                element: <UserDashboard/>,
+            },
 
-    {
-       path: "/add-room",
-         element: <AddRoom/>,
-    },
-    {
-        path: "/edit-room",
-        element: <EditRoom/>,
-    },
-    {
-        path:"/about",
-        element: <About/>,
-    },
-    {
-        path:"/roomDetails",
-        element: <RoomDetailsPage/>,
-    },
+            {
+                path: "/add-room",
+                element: <AddRoom/>,
+            },
+            {
+                path: "/edit-room",
+                element: <EditRoom/>,
+            },
+            {
+                path: "/about",
+                element: <About/>,
+            },
+            {
+                path: "/roomDetails",
+                element: <RoomDetailsPage/>,
+            },
 
-    {
-        path:"/list",
-        element: <ListOfHotelPage/>,
-    },
-    {
-        path: "/create-booking",
-        element: <CreateBooking />
-    },
-    {
-        path: "/edit-booking",
-        element: <EditBooking />
-    },
-    {
-        path: "/hotel_card",
-        element: <HotelCard />
-    },
-    {
-        path: "/contact",
-        element: <ContactPage />
+            {
+                path: "/list",
+                element: <ListOfHotelPage/>,
+            },
+            {
+                path: "/create-booking",
+                element: <CreateBooking/>
+            },
+            {
+                path: "/edit-booking",
+                element: <EditBooking/>
+            },
+            {
+                path: "/hotel_card",
+                element: <HotelCard/>
+            },
+            {
+                path: "/contact",
+                element: <ContactPage/>
+            },
+            {
+                path: "/room_card",
+                element: <RoomCard/>
+            }
+            ,
+            {
+                path: "/hotel_details",
+                element: <HotelDetails/>
+            }
+        ]
     }
-
 
 ]

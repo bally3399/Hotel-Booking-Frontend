@@ -1,162 +1,127 @@
 import React, { useState } from "react";
-import { TextField, Button, FormControl } from "@mui/material";
-import { HiArrowLeft } from "react-icons/hi";
-import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "./RoomDetails.module.css";
+import {useLocation} from "react-router-dom";
 
-const RoomDetailsPage = () => {
-    const [form, setForm] = useState({
-        roomType: "SUITE",
-        price : 200.00,
-        available: true,
-        hotelId: 1,
-    });
-
-    const navigate = useNavigate();
-    const [errors, setErrors] = useState({});
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setForm((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : value,
-        }));
+const RoomBookingPage = () => {
+    const [showAllImages, setShowAllImages] = useState(false);
+    const location = useLocation();
+    const { roomData,price,type } = location.state;
+    const toggleImageDisplay = () => {
+        setShowAllImages(!showAllImages);
     };
 
-    const token = "85883939738625756";
+    const renderImages = () => {
+        const   images  = roomData;
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        try {
-            const payload = {
-                roomType: form.roomType,
-                price: form.price,
-                available: form.available,
-                hotelId: form.hotelId,
-                
-            };
-
-            const response = await axios.put(
-                "http://api.fortunaehotel.com/api/v1/rooms/2",
-                payload,
-                { headers: { 
-                    "Content-Type": "application/json", 
-                    Authorization: `Bearer ${token}`
-                } 
-              }
+        if (showAllImages) {
+            return (
+                <div className="grid grid-cols-1 gap-4">
+                    {images.map((image, index) => (
+                        <img
+                            key={index}
+                            src={image}
+                            alt={`room-${index}`}
+                            className="w-full h-64 object-cover rounded-lg"
+                        />
+                    ))}
+                    <button
+                        onClick={toggleImageDisplay}
+                        className="bg-gray-200 text-black py-2 px-4 mt-4 rounded self-center"
+                    >
+                        Back
+                    </button>
+                </div>
             );
-
-            if (response.data === "Booked room successfully") {
-                toast.success(`Welcome ${form.userId}, you have successfully booked a room!`);
-                setTimeout(() => navigate("/login"), 3000);
-            } else {
-                toast.error("Failed. Please try again.");
-            }
-            // eslint-disable-next-line no-unused-vars
-        } catch (error) {
-            toast.error("Failed to book room. Please try again.");
-        } finally {
-            setIsLoading(false);
         }
+
+        if (images.length === 2) {
+            return (
+                <div className="grid grid-cols-2 gap-4">
+                    {images.map((image, index) => (
+                        <img
+                            key={index}
+                            src={image}
+                            alt={`room-${index}`}
+                            className="w-full h-64 object-cover rounded-lg"
+                        />
+                    ))}
+                </div>
+            );
+        }
+
+        if (images.length >= 3) {
+            const otherImagesCount = images.length - 2;
+
+            return (
+                <div className="w-full grid grid-cols-2 gap-4 h-[18rem] md:h-full">
+                    {/* Left: first image, full height */}
+                    <img
+                        src={images[0]}
+                        alt="room-1"
+                        className="w-full h-full object-cover rounded-lg"
+                    />
+
+                    {/* Right: second and third stacked */}
+                    <div className="flex flex-col gap-4 h-full">
+                        <img
+                            src={images[1]}
+                            alt="room-2"
+                            className="w-full h-1/2 object-cover rounded-lg"
+                        />
+
+                        {/* Third image with overlay */}
+                        <div
+                            className="relative w-full h-1/2 cursor-pointer"
+                            onClick={toggleImageDisplay}
+                        >
+                            <img
+                                src={images[2]}
+                                alt="room-3"
+                                className="w-full h-full object-cover rounded-lg brightness-50"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <span className="text-white text-4xl font-bold">
+                                  +{otherImagesCount}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return null;
     };
 
     return (
-        <div className={styles.roomContainer}>
-            <div className={styles.backButton} onClick={() => navigate("/")}>
-                <HiArrowLeft className="mr-2" /> Back
+        <div className="flex w-full flex-col items-center p-8 bg-gray-100 ">
+        {/* Images Section */}
+            <div className="w-full bg-white rounded-lg shadow-lg p-6 mb-8">
+                {renderImages()}
             </div>
-            <div className={styles.roomCard}>
-                <h2 className={styles.roomTitle}> Room Details </h2>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Room Type"
-                        name="roomtype"
-                        value={form.roomtype}
-                        onChange={handleChange}
-                        fullWidth
-                        className={styles.formField}
-                        sx={{
-                            "& label.Mui-focused": { color: "#a68b5b" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a68b5b" },
-                                "&.Mui-focused fieldset": { borderColor: "#a68b5b" },
-                            },
-                            marginBottom: "16px",
-                        }}
-                    />
-                    <TextField
-                        label="price"
-                        name="price"
-                        value={form.price}
-                        onChange={handleChange}
-                        fullWidth
-                        className={styles.formField}
-                        sx={{
-                            "& label.Mui-focused": { color: "#a68b5b" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a68b5b" },
-                                "&.Mui-focused fieldset": { borderColor: "#a68b5b" },
-                            },
-                            marginBottom: "16px",
-                        }}
-                    />
-                    <TextField
-                        label="available"
-                        name="available"
-                        value={form.available}
-                        onChange={handleChange}
-                        fullWidth
-                        className={styles.formField}
-                        sx={{
-                            "& label.Mui-focused": { color: "#a68b5b" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a68b5b" },
-                                "&.Mui-focused fieldset": { borderColor: "#a68b5b" },
-                            },
-                            marginBottom: "16px",
-                        }}
-                    />
-                    
-                    <TextField
-                        label="Hotel Id"
-                        name="hotelId"
-                        type="number"
-                        value={form.endDate}
-                        onChange={handleChange}
-                        fullWidth
-                        className={styles.formField}
-                        sx={{
-                            "& label.Mui-focused": { color: "#a68b5b" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a68b5b" },
-                                "&.Mui-focused fieldset": { borderColor: "#a68b5b" },
-                            },
-                            marginBottom: "16px",
-                        }}
-                    />
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
-                        disabled={isLoading}
-                        className={styles.submitButton}
-                    >
-                        {isLoading ? "Editing ..." : "Edit Now"}
-                    </Button>
-                </form>
-                <ToastContainer position="top-right" autoClose={3000} />
+
+            {/* Room Details Section */}
+            <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-2 md:p-6 ">
+                <p className="text-md font-semibold font-sans px-2">
+                    <span className="text-2xl font-semibold">Type:</span>&nbsp;&nbsp;
+                    {type}
+                </p>
+                <p className="text-md font-semibold font-sans px-2">
+                    <span className="text-2xl font-semibold">Price:</span>&nbsp;&nbsp;
+                    £{price}
+                </p>
+                <button
+                    onClick={() => toast.success("Booking confirmed!")}
+                    className="bg-blue-500 text-white py-2 px-4 mt-4 rounded"
+                >
+                    Confirm Booking
+                </button>
             </div>
+
+            <ToastContainer/>
         </div>
     );
 };
 
-export default RoomDetailsPage;
+export default RoomBookingPage;
