@@ -19,6 +19,7 @@ import HotelCard from "../component/hotelCard/hotelCard";
 import HeroPage from "../pages/homepage/heroPage/HeroPage.jsx";
 import RoomCard from "../component/roomCard/roomCard.jsx";
 import HotelDetails from "../pages/homepage/hotelDetails/hotelDetails.jsx";
+import RegisterAdmin from "../pages/homepage/registerAdmin/RegisterAdmin.jsx";
 import Payment from "../component/payment/payment.jsx";
 import BookedRoom from "../pages/homepage/userDashboard/bookedRoom.jsx";
 
@@ -41,6 +42,10 @@ export const ROUTES = [
                 element: <Register/>,
             },
 
+            {
+                path: "/admin/register",
+                element: <RegisterAdmin/>,
+            },
 
             {
                 path: "/login",
@@ -96,7 +101,7 @@ export const ROUTES = [
             },
 
             {
-                path: "/list",
+                path: "/hotels",
                 element: <ListOfHotelPage/>,
             },
             {

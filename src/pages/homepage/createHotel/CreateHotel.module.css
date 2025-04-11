@@ -59,12 +59,6 @@ button:hover {
     background-color: #a47a47 !important;
 }
 
-.fileInput {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
 .backButton {
     position: absolute;
     top: 16px;
@@ -75,3 +69,54 @@ button:hover {
     cursor: pointer;
 }
 
+/* New styles for picture URL functionality */
+.pictureSection {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.pictureList {
+    margin: 10px 0;
+}
+
+.pictureList h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: #a68b5b;
+}
+
+.pictureList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pictureItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    word-break: break-all;
+    padding: 5px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.addPictureButton {
+    padding: 8px 15px !important;
+    min-width: 80px;
+    margin-bottom: 20px;
+    background: #fff !important;
+    color: #a68b5b !important;
+    border: 1px solid #a68b5b !important;
+    border-radius: 5px !important;
+}
+
+.addPictureButton:hover {
+    background: #f0f0f0 !important;
+    border-color: #a47a47 !important;
+    color: #a47a47 !important;
+}
