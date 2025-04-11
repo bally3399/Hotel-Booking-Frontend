@@ -21,6 +21,7 @@ import RoomCard from "../component/roomCard/roomCard.jsx";
 import HotelDetails from "../pages/homepage/hotelDetails/hotelDetails.jsx";
 import RegisterAdmin from "../pages/homepage/registerAdmin/RegisterAdmin.jsx";
 import Payment from "../component/payment/payment.jsx";
+import BookedRoom from "../pages/homepage/userDashboard/bookedRoom.jsx";
 
 
 
@@ -89,6 +90,10 @@ export const ROUTES = [
             {
                 path: "/about",
                 element: <About/>,
+            },
+            {
+                path: "/bookedRoom",
+                element: <BookedRoom/>,
             },
             {
                 path: "/roomDetails",
