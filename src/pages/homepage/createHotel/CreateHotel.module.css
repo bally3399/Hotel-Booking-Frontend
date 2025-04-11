@@ -69,14 +69,6 @@ button:hover {
     cursor: pointer;
 }
 
-/* New styles for picture URL functionality */
-.pictureSection {
-    margin: 10px 0;
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-}
-
 .pictureList {
     margin: 10px 0;
 }
@@ -105,18 +97,29 @@ button:hover {
     border: 1px solid #ddd;
 }
 
+.pictureSection {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .addPictureButton {
     padding: 8px 15px !important;
     min-width: 80px;
-    margin-bottom: 20px;
+    height: 40px;
+    margin-bottom: 0 !important;
     background: #fff !important;
     color: #a68b5b !important;
     border: 1px solid #a68b5b !important;
     border-radius: 5px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .addPictureButton:hover {
-    background: #f0f0f0 !important;
-    border-color: #a47a47 !important;
-    color: #a47a47 !important;
+    background: #f5f5f5 !important;
+    border-color: #8c6239 !important;
+    color: #8c6239 !important;
 }

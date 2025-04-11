@@ -1,12 +1,42 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import styles from "./CreateHotel.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { HiArrowLeft } from "react-icons/hi";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
+
+const LOCATIONS = [
+    "ABERDEEN",
+    "BELFAST",
+    "BIRMINGHAM",
+    "BRIGHTON",
+    "BRISTOL",
+    "CAMBRIDGE",
+    "CARDIFF",
+    "DERRY",
+    "DUNDEE",
+    "EDINBURGH",
+    "GLASGOW",
+    "INVERNESS",
+    "LEEDS",
+    "LISBURN",
+    "LIVERPOOL",
+    "LONDON",
+    "MANCHESTER",
+    "NEWCASTLE_UPON_TYNE",
+    "NEWPORT",
+    "NOTTINGHAM",
+    "OXFORD",
+    "READING",
+    "SHEFFIELD",
+    "SOUTHAMPTON",
+    "SWANSEA",
+    "WREXHAM",
+    "YORK"
+];
 
 const CreateHotel = () => {
     const [hotelData, setHotelData] = useState({
@@ -66,9 +96,12 @@ const CreateHotel = () => {
             return;
         }
 
+        //Authorization
         try {
             const decodedToken = jwtDecode(token);
-            if (decodedToken.role !== "Admin") {
+            console.log(decodedToken)
+            console.log(decodedToken.roles[0])
+            if (decodedToken.roles[0] !== "ADMIN") {
                 setMessage("Unauthorized: Only admins can add hotels.");
                 return;
             }
@@ -76,6 +109,10 @@ const CreateHotel = () => {
             setMessage("Invalid token.");
             return;
         }
+
+        //navigation
+        navigate("/hotels");
+
 
         const payload = {
             name: hotelData.name,
@@ -99,6 +136,7 @@ const CreateHotel = () => {
             );
 
             setMessage("Hotel added successfully!");
+            console.log(message)
             setHotelData({
                 name: "",
                 location: "",
@@ -106,9 +144,11 @@ const CreateHotel = () => {
                 amenities: "",
                 pictures: [],
             });
-            navigate("/hotels");
+            console.log(hotelData)
+            // navigate("/hotels");
         } catch (error) {
             setMessage(`Failed to add hotel: ${error.response?.data?.message || error.message}`);
+            console.log(message)
         }
     };
 
@@ -134,17 +174,25 @@ const CreateHotel = () => {
                         margin="normal"
                         sx={inputStyles}
                     />
-
-                    <TextField
-                        label="Location"
-                        name="location"
-                        value={hotelData.location}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        margin="normal"
-                        sx={inputStyles}
-                    />
+                    <FormControl fullWidth margin="normal" sx={inputStyles}>
+                        <InputLabel>Location</InputLabel>
+                        <Select
+                            name="location"
+                            value={hotelData.location}
+                            onChange={handleChange}
+                            label="Location"
+                            required
+                        >
+                            <MenuItem value="">
+                                <em>Select a location</em>
+                            </MenuItem>
+                            {LOCATIONS.map((location) => (
+                                <MenuItem key={location} value={location}>
+                                    {location.replace(/_/g, " ")}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <TextField
                         label="Description"
                         name="description"
@@ -176,6 +224,12 @@ const CreateHotel = () => {
                             fullWidth
                             margin="normal"
                             sx={inputStyles}
+                            InputProps={{
+                                style: { height: "40px" }
+                            }}
+                            InputLabelProps={{
+                                style: { top: "-6px" }
+                            }}
                         />
                         <Button
                             variant="outlined"
