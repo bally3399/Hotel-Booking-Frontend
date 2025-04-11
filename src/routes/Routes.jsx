@@ -6,22 +6,22 @@ import Login from "../pages/homepage/login/Login";
 import TourPage from "../pages/homepage/tour/Tour";
 import CreateHotel from "../pages/homepage/createHotel/CreateHotel";
 import AdminDashboard from "../pages/homepage/adminDashboard/AdminDashboard";
-import AddRoom from "../pages/homepage/AddRoom/Addroom";
-import EditRoom from "../pages/homepage/editRoom/EditRoom";
 import UserDashboard from "../pages/homepage/userDashboard/userDashboard";
-import About from "../pages/homepage/about/About";
-import RoomDetailsPage from "../pages/homepage/roomDetails/RoomDetails";
-import ListOfHotelPage from "../pages/homepage/listOfHotel/ListOfHotel";
-import CreateBooking from "../pages/homepage/createBooking/createBooking";
-import EditBooking from "../pages/homepage/editBooking/editBooking";
-import ContactPage from "../pages/homepage/contact/Contact";
-import HotelCard from "../component/hotelCard/hotelCard";
 import HeroPage from "../pages/homepage/heroPage/HeroPage.jsx";
+import RegisterAdmin from "../pages/homepage/registerAdmin/RegisterAdmin.jsx";
+import AddRoom from "../pages/homepage/AddRoom/Addroom.jsx";
+import EditRoom from "../pages/homepage/editRoom/EditRoom.jsx";
+import About from "../pages/homepage/about/About.jsx";
+import ListOfHotelPage from "../pages/homepage/listOfHotel/ListOfHotel.jsx";
+import CreateBooking from "../pages/homepage/createBooking/createBooking.jsx";
+import EditBooking from "../pages/homepage/editBooking/editBooking.jsx";
+import HotelCard from "../component/hotelCard/hotelCard.jsx";
+import ContactPage from "../pages/homepage/contact/Contact.jsx";
+import Payment from "../component/payment/payment.jsx";
 import RoomCard from "../component/roomCard/roomCard.jsx";
 import HotelDetails from "../pages/homepage/hotelDetails/hotelDetails.jsx";
-import RegisterAdmin from "../pages/homepage/registerAdmin/RegisterAdmin.jsx";
-import Payment from "../component/payment/payment.jsx";
-import BookedRoom from "../pages/homepage/userDashboard/bookedRoom.jsx";
+import RoomBookingPage from "../pages/homepage/roomDetails/RoomDetails.jsx";
+import BookedRoom from "../pages/homepage/userDashboard/bookedRoom.js";
 
 
 
@@ -83,6 +83,7 @@ export const ROUTES = [
                 path: "/add-room",
                 element: <AddRoom/>,
             },
+
             {
                 path: "/edit-room",
                 element: <EditRoom/>,
@@ -97,7 +98,7 @@ export const ROUTES = [
             },
             {
                 path: "/roomDetails",
-                element: <RoomDetailsPage/>,
+                element: <RoomBookingPage/>,
             },
 
             {
@@ -127,8 +128,8 @@ export const ROUTES = [
             {
                 path: "/room_card",
                 element: <RoomCard/>
-            }
-            ,
+            },
+
             {
                 path: "/hotel_details",
                 element: <HotelDetails/>

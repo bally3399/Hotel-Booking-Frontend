@@ -1,6 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../../component/navbar/Navbar";
-import Footer from "../../../component/footer";
 import styles from "./AdminDashboard.module.css";
 import { useState } from "react";
 import axios from 'axios';
@@ -289,7 +287,14 @@ const Dashboard = () => {
                     <button onClick={getHotelsByLocation} className={styles.actionButton} disabled={loading}>
                         Get Hotel By Location
                     </button>
-                    <button onClick={() => navigate("/add-room")} className={styles.actionButton}>
+                    <button onClick={() => {
+                        console.log("adding")
+                                navigate("/add-room")
+                        console.log("already added")
+                                }
+                            }
+                            className={styles.actionButton}>
+
                         Add Room To Hotel
                     </button>
                 </div>
