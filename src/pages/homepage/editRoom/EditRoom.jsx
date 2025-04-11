@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import styles from "../AddRoom/Addroom.module.css";
 
 
-const AddRoom = () => {
+const EditRoom = () => {
     const [roomDetails, setRoomDetails] = useState({
         roomType: "SUITE",
         price: 200.00,
@@ -41,7 +41,7 @@ const AddRoom = () => {
                 });
     
                 if (response.status === 200) {
-                    response.data = "True" ? setIsAvailable(true) : setIsAvailable(false) 
+                    response.data = "True" ? setIsAvailable(true) : setIsAvailable(false)
                     toast.success("Room Available!", { position: "top-right", autoClose: 3000 });
                 } else {
                     toast.error("Failed to add room. Try again.");
@@ -164,4 +164,4 @@ const AddRoom = () => {
     );
 };
 
-export default AddRoom;
+export default EditRoom;

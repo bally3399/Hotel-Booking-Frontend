@@ -43,8 +43,8 @@ const Login = () => {
             let rawResponse = response.data;
 
             const jsonString = typeof rawResponse === 'string'
-                ? rawResponse.split('}{"error"')[0] + '}' // Take only the first part
-                : JSON.stringify(rawResponse); // If already an object, stringify it
+                ? rawResponse.split('}{"error"')[0] + '}'
+                : JSON.stringify(rawResponse);
             const parsedResponse = JSON.parse(jsonString);
 
             const { success, data } = parsedResponse;

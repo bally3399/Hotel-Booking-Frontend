@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { TextField, Button, MenuItem } from "@mui/material";
+import { TextField, Button, MenuItem, FormControl, InputLabel, Select } from "@mui/material";
 import styles from "./Addroom.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -11,22 +11,101 @@ const API_URL = "https://hotel-booking-management-backend.onrender.com";
 const AddRoom = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const hotelIdFromState = location.state?.hotel?.id || 0;
+    const hotelIdFromState = location.state?.hotel?.id;
+
+    // Redirect if hotelId is not provided
+    // useEffect(() => {
+    //     // if (!hotelIdFromState) {
+    //     //     navigate("/admin-dashboard", { state: { message: "Hotel ID is required to add a room." } });
+    //     // }
+    // }, [hotelIdFromState, navigate]);
 
     const [roomData, setRoomData] = useState({
         roomType: "SINGLE",
         price: "",
-        isAvailable: false,
-        hotelId: hotelIdFromState,
+        isAvailable: "NOT AVAILABLE",
+        hotelId: hotelIdFromState || "",
+        pictures: [],
     });
 
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
+
+    // Cloudinary Upload Widget setup
+    const cloudinaryRef = useRef();
+    const widgetRef = useRef();
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://upload-widget.cloudinary.com/global/all.js";
+        script.async = true;
+        script.onload = () => {
+            if (!window.cloudinary) {
+                setMessage("Failed to load Cloudinary widget. Please try again later.");
+                return;
+            }
+            cloudinaryRef.current = window.cloudinary;
+            widgetRef.current = cloudinaryRef.current.createUploadWidget(
+                {
+                    cloudName: "dsd8rgdju",
+                    uploadPreset: "hotel_upload_preset",
+                    sources: ["local"],
+                    multiple: true,
+                    maxFiles: 5,
+                },
+                (error, result) => {
+                    if (error) {
+                        console.error("Upload error:", error);
+                        setMessage(`Failed to upload image: ${error.message || "Unknown error"}`);
+                        setUploading(false);
+                        return;
+                    }
+                    if (result.event === "queues-start") {
+                        setUploading(true);
+                    }
+                    if (result.event === "queues-end") {
+                        setUploading(false);
+                    }
+                    if (result && result.event === "success") {
+                        setRoomData(prev => ({
+                            ...prev,
+                            pictures: [...prev.pictures, result.info.secure_url],
+                        }));
+                    }
+                }
+            );
+        };
+        script.onerror = () => {
+            setMessage("Failed to load Cloudinary script. Please check your internet connection.");
+        };
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setRoomData(prev => ({
             ...prev,
-            [name]: name === "price" ? parseFloat(value) || "" : value
+            [name]:
+                name === "price"
+                    ? value === ""
+                        ? ""
+                        : parseFloat(value) >= 0
+                            ? parseFloat(value)
+                            : prev.price
+                    : name === "isAvailable"
+                        ? value : value
+        }));
+    };
+
+    const removePicture = (index) => {
+        setRoomData(prev => ({
+            ...prev,
+            pictures: prev.pictures.filter((_, i) => i !== index),
         }));
     };
 
@@ -42,29 +121,34 @@ const AddRoom = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
+        setLoading(true);
 
         const token = localStorage.getItem("token");
         if (!token) {
             setMessage("Unauthorized: No token found.");
+            setLoading(false);
             return;
         }
 
         try {
             const decodedToken = jwtDecode(token);
-            if (decodedToken.role !== "Admin") {
+            if (decodedToken.roles[0] !== "ADMIN") {
                 setMessage("Unauthorized: Only admins can add rooms.");
+                setLoading(false);
                 return;
             }
         } catch (error) {
             setMessage("Invalid token.");
+            setLoading(false);
             return;
         }
 
         const payload = {
             roomType: roomData.roomType,
-            price: roomData.price ? { amount: roomData.price } : {},
-            isAvailable: roomData.isAvailable === "true",
+            price: roomData.price ? { amount: parseFloat(roomData.price) } : {},
+            isAvailable: roomData.isAvailable,
             hotelId: parseInt(roomData.hotelId),
+            pictures: roomData.pictures,
         };
 
         try {
@@ -84,12 +168,15 @@ const AddRoom = () => {
             setRoomData({
                 roomType: "SINGLE",
                 price: "",
-                isAvailable: false,
+                isAvailable: "NOT AVAILABLE",
                 hotelId: hotelIdFromState,
+                pictures: [],
             });
             navigate("/rooms");
         } catch (error) {
             setMessage(`Failed to add room: ${error.response?.data?.message || error.message}`);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -99,7 +186,7 @@ const AddRoom = () => {
                 className={styles.backButton}
                 onClick={() => navigate("/admin-dashboard")}
             >
-                <HiArrowLeft className="mr-2"/> Back
+                <HiArrowLeft className="mr-2" /> Back
             </div>
             <div className={styles.addRoomContainer}>
                 <h2>Add a New Room</h2>
@@ -131,22 +218,21 @@ const AddRoom = () => {
                         required
                         margin="normal"
                         sx={inputStyles}
-                        inputProps={{ step: "100.00" }}
+                        inputProps={{ step: "100.00", min: "0" }}
                     />
-                    <TextField
-                        select
-                        label="Availability"
-                        name="isAvailable"
-                        value={roomData.isAvailable}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        margin="normal"
-                        sx={inputStyles}
-                    >
-                        <MenuItem value="true">Available</MenuItem>
-                        <MenuItem value="false">Not Available</MenuItem>
-                    </TextField>
+                    <FormControl fullWidth margin="normal" sx={inputStyles}>
+                        <InputLabel>Availability</InputLabel>
+                        <Select
+                            name="isAvailable"
+                            value={roomData.isAvailable}
+                            onChange={handleChange}
+                            label="Availability"
+                            required
+                        >
+                            <MenuItem value="AVAILABLE">Available</MenuItem>
+                            <MenuItem value="NOT AVAILABLE">Not Available</MenuItem>
+                        </Select>
+                    </FormControl>
                     <TextField
                         label="Hotel ID"
                         name="hotelId"
@@ -158,14 +244,49 @@ const AddRoom = () => {
                         margin="normal"
                         sx={inputStyles}
                     />
+                    <div className={styles.pictureSection}>
+                        <Button
+                            variant="outlined"
+                            onClick={() => widgetRef.current?.open()}
+                            className={styles.addPictureButton}
+                            disabled={uploading || loading}
+                        >
+                            {uploading ? "Uploading..." : "Upload Pictures"}
+                        </Button>
+                    </div>
+                    {roomData.pictures.length > 0 && (
+                        <div className={styles.pictureList}>
+                            <h4>Uploaded Pictures:</h4>
+                            <ul>
+                                {roomData.pictures.map((url, index) => (
+                                    <li key={index} className={styles.pictureItem}>
+                                        <img
+                                            src={url}
+                                            alt={`Uploaded ${index}`}
+                                            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                                        />
+                                        <Button
+                                            size="small"
+                                            color="error"
+                                            onClick={() => removePicture(index)}
+                                            disabled={loading}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                     <div className={styles.submitButtonWrapper}>
                         <Button
                             type="submit"
                             variant="contained"
                             className={styles.submitButton}
                             fullWidth
+                            disabled={loading || uploading}
                         >
-                            Add Room
+                            {loading ? "Adding Room..." : "Add Room"}
                         </Button>
                     </div>
                 </form>

@@ -1,12 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import styles from "./CreateHotel.module.css";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { HiArrowLeft } from "react-icons/hi";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
+
+const LOCATIONS = [
+    "ABERDEEN",
+    "BELFAST",
+    "BIRMINGHAM",
+    "BRIGHTON",
+    "BRISTOL",
+    "CAMBRIDGE",
+    "CARDIFF",
+    "DERRY",
+    "DUNDEE",
+    "EDINBURGH",
+    "GLASGOW",
+    "INVERNESS",
+    "LEEDS",
+    "LISBURN",
+    "LIVERPOOL",
+    "LONDON",
+    "MANCHESTER",
+    "NEWCASTLE_UPON_TYNE",
+    "NEWPORT",
+    "NOTTINGHAM",
+    "OXFORD",
+    "READING",
+    "SHEFFIELD",
+    "SOUTHAMPTON",
+    "SWANSEA",
+    "WREXHAM",
+    "YORK"
+];
 
 const CreateHotel = () => {
     const [hotelData, setHotelData] = useState({
@@ -18,32 +48,72 @@ const CreateHotel = () => {
     });
 
     const [message, setMessage] = useState("");
-    const [pictureUrl, setPictureUrl] = useState("");
+    const [uploading, setUploading] = useState(false);
     const navigate = useNavigate();
+
+    // Cloudinary Upload Widget setup
+    const cloudinaryRef = useRef();
+    const widgetRef = useRef();
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://upload-widget.cloudinary.com/global/all.js";
+        script.async = true;
+        script.onload = () => {
+            if (!window.cloudinary) {
+                setMessage("Failed to load Cloudinary widget. Please try again later.");
+                return;
+            }
+            cloudinaryRef.current = window.cloudinary;
+            widgetRef.current = cloudinaryRef.current.createUploadWidget(
+                {
+                    cloudName: "dsd8rgdju",
+                    uploadPreset: "hotel_upload_preset", // Ensure this matches your Cloudinary preset
+                    sources: ["local"],
+                    multiple: true,
+                    maxFiles: 5,
+                },
+                (error, result) => {
+                    if (error) {
+                        console.error("Upload error:", error);
+                        setMessage(`Failed to upload image: ${error.message || "Unknown error"}`);
+                        setUploading(false);
+                        return;
+                    }
+                    if (result.event === "queues-start") {
+                        setUploading(true);
+                    }
+                    if (result.event === "queues-end") {
+                        setUploading(false);
+                    }
+                    if (result && result.event === "success") {
+                        setHotelData(prev => ({
+                            ...prev,
+                            pictures: [...prev.pictures, result.info.secure_url],
+                        }));
+                    }
+                }
+            );
+        };
+        script.onerror = () => {
+            setMessage("Failed to load Cloudinary script. Please check your internet connection.");
+        };
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setHotelData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handlePictureUrlChange = (e) => {
-        setPictureUrl(e.target.value);
-    };
-
-    const addPictureUrl = () => {
-        if (pictureUrl.trim()) {
-            setHotelData(prev => ({
-                ...prev,
-                pictures: [...prev.pictures, pictureUrl.trim()]
-            }));
-            setPictureUrl("");
-        }
-    };
-
     const removePictureUrl = (index) => {
         setHotelData(prev => ({
             ...prev,
-            pictures: prev.pictures.filter((_, i) => i !== index)
+            pictures: prev.pictures.filter((_, i) => i !== index),
         }));
     };
 
@@ -68,7 +138,7 @@ const CreateHotel = () => {
 
         try {
             const decodedToken = jwtDecode(token);
-            if (decodedToken.role !== "Admin") {
+            if (decodedToken.roles[0] !== "ADMIN") {
                 setMessage("Unauthorized: Only admins can add hotels.");
                 return;
             }
@@ -118,7 +188,7 @@ const CreateHotel = () => {
                 className={styles.backButton}
                 onClick={() => navigate("/admin-dashboard")}
             >
-                <HiArrowLeft className="mr-2"/> Back
+                <HiArrowLeft className="mr-2" /> Back
             </div>
             <div className={styles.createHotelContainer}>
                 <h2>Add a New Hotel</h2>
@@ -134,17 +204,25 @@ const CreateHotel = () => {
                         margin="normal"
                         sx={inputStyles}
                     />
-
-                    <TextField
-                        label="Location"
-                        name="location"
-                        value={hotelData.location}
-                        onChange={handleChange}
-                        fullWidth
-                        required
-                        margin="normal"
-                        sx={inputStyles}
-                    />
+                    <FormControl fullWidth margin="normal" sx={inputStyles}>
+                        <InputLabel>Location</InputLabel>
+                        <Select
+                            name="location"
+                            value={hotelData.location}
+                            onChange={handleChange}
+                            label="Location"
+                            required
+                        >
+                            <MenuItem value="">
+                                <em>Select a location</em>
+                            </MenuItem>
+                            {LOCATIONS.map((location) => (
+                                <MenuItem key={location} value={location}>
+                                    {location.replace(/_/g, " ")}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <TextField
                         label="Description"
                         name="description"
@@ -169,29 +247,26 @@ const CreateHotel = () => {
                         helperText="Example: wifi, pool, parking"
                     />
                     <div className={styles.pictureSection}>
-                        <TextField
-                            label="Picture URL"
-                            value={pictureUrl}
-                            onChange={handlePictureUrlChange}
-                            fullWidth
-                            margin="normal"
-                            sx={inputStyles}
-                        />
                         <Button
                             variant="outlined"
-                            onClick={addPictureUrl}
+                            onClick={() => widgetRef.current?.open()}
                             className={styles.addPictureButton}
+                            disabled={uploading}
                         >
-                            Add
+                            {uploading ? "Uploading..." : "Upload Pictures"}
                         </Button>
                     </div>
                     {hotelData.pictures.length > 0 && (
                         <div className={styles.pictureList}>
-                            <h4>Added Pictures:</h4>
+                            <h4>Uploaded Pictures:</h4>
                             <ul>
                                 {hotelData.pictures.map((url, index) => (
                                     <li key={index} className={styles.pictureItem}>
-                                        {url}
+                                        <img
+                                            src={url}
+                                            alt={`Uploaded ${index}`}
+                                            style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                                        />
                                         <Button
                                             size="small"
                                             color="error"
