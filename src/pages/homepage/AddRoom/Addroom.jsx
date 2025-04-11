@@ -13,13 +13,6 @@ const AddRoom = () => {
     const location = useLocation();
     const hotelIdFromState = location.state?.hotel?.id;
 
-    // Redirect if hotelId is not provided
-    // useEffect(() => {
-    //     // if (!hotelIdFromState) {
-    //     //     navigate("/admin-dashboard", { state: { message: "Hotel ID is required to add a room." } });
-    //     // }
-    // }, [hotelIdFromState, navigate]);
-
     const [roomData, setRoomData] = useState({
         roomType: "SINGLE",
         price: "",
@@ -97,8 +90,7 @@ const AddRoom = () => {
                         : parseFloat(value) >= 0
                             ? parseFloat(value)
                             : prev.price
-                    : name === "isAvailable"
-                        ? value : value
+                    : value,
         }));
     };
 
@@ -145,10 +137,10 @@ const AddRoom = () => {
 
         const payload = {
             roomType: roomData.roomType,
-            price: roomData.price ? { amount: parseFloat(roomData.price) } : {},
-            isAvailable: roomData.isAvailable,
+            price: roomData.price ? parseFloat(roomData.price) : 0,
+            isAvailable: roomData.isAvailable === "AVAILABLE",
             hotelId: parseInt(roomData.hotelId),
-            pictures: roomData.pictures,
+            pictures: Array.isArray(roomData.pictures) ? roomData.pictures : [],
         };
 
         try {
