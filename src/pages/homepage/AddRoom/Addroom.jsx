@@ -139,8 +139,8 @@ const AddRoom = () => {
             roomType: roomData.roomType,
             price: roomData.price ? parseFloat(roomData.price) : 0,
             isAvailable: roomData.isAvailable === "AVAILABLE",
-            hotelId: parseInt(roomData.hotelId),
-            pictures: Array.isArray(roomData.pictures) ? roomData.pictures : [],
+            hotelId: roomData.hotelId,
+            pictures: roomData.pictures,
         };
 
         try {
