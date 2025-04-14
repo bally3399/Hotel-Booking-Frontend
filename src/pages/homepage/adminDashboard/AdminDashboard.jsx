@@ -1,4 +1,3 @@
-// src/components/AdminDashboard.js
 import { useNavigate } from "react-router-dom";
 import styles from "./AdminDashboard.module.css";
 import { useState } from "react";
