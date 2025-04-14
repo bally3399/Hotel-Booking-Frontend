@@ -22,6 +22,17 @@ import RoomCard from "../component/roomCard/roomCard.jsx";
 import HotelDetails from "../pages/homepage/hotelDetails/hotelDetails.jsx";
 import RoomBookingPage from "../pages/homepage/roomDetails/RoomDetails.jsx";
 import BookedRoom from "../pages/homepage/userDashboard/bookedRoom.js";
+import GetHotelById from "../pages/homepage/getHotelById/GetHotelById.jsx";
+import DeleteHotelById from "../pages/homepage/deleteHotelById/DeleteHotelById.jsx";
+import DeactivateRoom from "../pages/homepage/deactivateRoom/DeactivateRoom.jsx";
+import ActivateRoom from "../pages/homepage/activateRoom/ActivateRoom.jsx";
+import FindAllAvailableRoomPage from "../pages/homepage/findAllAvailableRooms/FindAllAvailableRoom.jsx";
+import CheckRoomAvailabilityPage from "../pages/homepage/checkRoomAvailability/CheckRoomAvailability.jsx";
+import FilterByPriceAndLocationPage from "../pages/homepage/filteredByLocation/FilteredByLocation.jsx";
+import FilterRoomByTypePage from "../pages/homepage/filterRoomByType/FilterRoomByType.jsx";
+import DeleteRoomByIdPage from "../pages/homepage/deleteRoomById/DeleteRoomById.jsx";
+import GetHotelsByLocationPage from "../pages/homepage/getHotelsByLocation/GetHotelsByLocation.jsx";
+import AvailableRooms from "../pages/homepage/availableRoom/AvailableRoom.jsx";
 
 
 
@@ -102,6 +113,11 @@ export const ROUTES = [
             },
 
             {
+                path: "/available-rooms",
+                element: <AvailableRooms/>,
+            },
+
+            {
                 path: "/hotels",
                 element: <ListOfHotelPage/>,
             },
@@ -133,7 +149,53 @@ export const ROUTES = [
             {
                 path: "/hotel_details",
                 element: <HotelDetails/>
+            },
+
+            {
+                path: "/get-hotel-by-id",
+                element: <GetHotelById/>
+            },
+
+            {
+                path: "/get-hotels-by-location",
+                element: <GetHotelsByLocationPage/>
+            },
+            {
+                path: "/delete-hotel-by-id",
+                element: <DeleteHotelById/>
+            },
+            {
+                path: "/deactivate-room-by-hotel-id",
+                element: <DeactivateRoom/>
+            },
+
+            {
+                path: "/activate-room-by-hotel-id",
+                element: <ActivateRoom/>
+            },
+            {
+                path: "/find-all-available-rooms",
+                element: <FindAllAvailableRoomPage/>
+            },
+            {
+                path: "/check-room-availability",
+                element: <CheckRoomAvailabilityPage/>
+            },
+            {
+                path: "filter-by-price-and-location",
+                element: <FilterByPriceAndLocationPage/>
+            },
+            {
+                path: "/filter-rooms-by-type",
+                element: <FilterRoomByTypePage/>
+            },
+
+            {
+                path: "/delete-room-by-id",
+                element: <DeleteRoomByIdPage/>
             }
+
+
         ]
     }
 

@@ -19,7 +19,7 @@ const ListOfHotelPage = () => {
     // }, []);
 
     const  onClick  = (hotelData)=>{
-        navigate("/hotel_details", { state: {hotelData: hotelData } })
+        navigate("/hotel_details", { location: {hotelData: hotelData } })
     }
 
     return (
