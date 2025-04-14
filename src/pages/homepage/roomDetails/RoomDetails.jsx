@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {useLocation, useNavigate} from "react-router-dom";
 
@@ -14,7 +14,7 @@ const RoomBookingPage = () => {
     };
     const navigate = useNavigate();
     const handlePay = () =>{
-        navigate("/payment",{state:{price:price}})
+        navigate("/payment",{location:{price:price}})
     }
     const renderImages = () => {
         const   images  = roomData;
