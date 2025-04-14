@@ -89,7 +89,7 @@ const Navbar = () => {
                     </button>
                 ) : (
                     <button className={styles.getStarted} onClick={handleLogout}>
-                        Logout
+                        Login
                     </button>
                 )}
             </div>
