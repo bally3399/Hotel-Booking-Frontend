@@ -64,7 +64,7 @@ const Login = () => {
 
                 const decodedToken = jwtDecode(token);
                 const role = decodedToken.roles[0];
-                console.log(role)
+
                 toast.success(`Welcome ${form.email}, you have logged in successfully!`, {
                     position: 'top-right',
                     autoClose: 3000,

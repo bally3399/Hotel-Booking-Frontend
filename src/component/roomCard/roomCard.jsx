@@ -8,8 +8,11 @@ import {FaShower, FaTv, FaWifi} from "react-icons/fa";
 const RoomCard = ({ data}) => {
     const navigate = useNavigate();
     const handleBookRoom = () => {
+        if(!localStorage.getItem("token")){
+            toast.error("You are not Logged in so you cant book room. Please Log in to book room!");
+            return
+        }
         if (!data?.available) {
-            // Show error toast if the room is not available
             toast.error("This room is not available for booking!", {
                 position: "top-right",
                 autoClose: 3000,
