@@ -50,6 +50,7 @@ const Login = () => {
             const { success, data } = parsedResponse;
             console.log(parsedResponse)
             if (!success || !data?.jwtToken) {
+                toast.error('Authentication failed or token missing')
                 throw new Error('Authentication failed or token missing');
             }
 
@@ -63,7 +64,7 @@ const Login = () => {
 
                 const decodedToken = jwtDecode(token);
                 const role = decodedToken.roles[0];
-
+                console.log(role)
                 toast.success(`Welcome ${form.email}, you have logged in successfully!`, {
                     position: 'top-right',
                     autoClose: 3000,
@@ -71,8 +72,8 @@ const Login = () => {
 
                 if (role === 'ADMIN') {
                     navigate('/admin-dashboard');
-                } else {
-                    navigate('/add-room');
+                } else if (role === 'USER') {
+                    navigate('/user-dashboard');
                 }
             }
         } catch (error) {

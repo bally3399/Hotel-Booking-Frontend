@@ -3,52 +3,53 @@ import axios from "axios"; // Import axios for API calls
 import { useLocation, useNavigate } from "react-router-dom";
 import RoomCard from "../../../component/roomCard/roomCard.jsx";
 import NotFoundPage from "../../../component/notFound/notFoundPage.jsx";
+import image1 from "../../../assets/img/hotel4.jpeg";
+
 
 const HotelDetails = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { hotelData } = location.state;
 
-    const [rooms, setRooms] = useState([]); // State to store fetched rooms
-    const [loading, setLoading] = useState(true); // State to track loading status
+    const [rooms, setRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Function to check if the user is authenticated
+
     const isAuthenticated = () => {
-        const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtYXZlcmlja3NfaHViIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNzQ0NzA4NzA1fQ.BySqJjDt7NxtaUPKIn6AXwPpNpnF5qEssnA7u5vf4I5to8bydOIZ8Mgb7eh9Ntf7C0SEPjjVsFcxmEqEUnJ8Tw"; // Check if a token exists in local storage
-        return !!token; // Return true if token exists, false otherwise
+        const token = localStorage.getItem("token");
+        return !!token;
     };
 
     useEffect(() => {
         const fetchRooms = async () => {
             try {
-                // Check if the user is authenticated
+
                 if (!isAuthenticated()) {
                     console.error("User is not authenticated");
-                    navigate("/login"); // Redirect to login page if not authenticated
+                    navigate("/login");
                     return;
                 }
 
-                // Fetch data from the backend API
-                const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtYXZlcmlja3NfaHViIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNzQ0NzA4NzA1fQ.BySqJjDt7NxtaUPKIn6AXwPpNpnF5qEssnA7u5vf4I5to8bydOIZ8Mgb7eh9Ntf7C0SEPjjVsFcxmEqEUnJ8Tw"; // Get the token from local storage
+
+                const token = localStorage.getItem("token");
                 const response = await axios.get(
-                    `https://hotel-booking-management-backend.onrender.com/api/v1/room/hotel/${hotelData.id}`,
+                    `https://hotel-booking-management-backend.onrender.com/api/v1/rooms/hotel/${hotelData.id}`,
                     {
                         headers: {
-                            Authorization: `Bearer ${token}`, // Include the token in the request headers
+                            Authorization: `Bearer ${token}`,
                         },
                     }
                 );
-
-                setRooms(response.data.data); // Set the fetched data to state
+                console.log(response.data)
+                setRooms(response.data);
             } catch (error) {
                 console.error("Error fetching rooms:", error);
                 if (error.response && error.response.status === 401) {
-                    // Handle unauthorized access (e.g., token expired)
                     console.error("Unauthorized: Token expired or invalid");
-                    navigate("/login"); // Redirect to login page
+                    navigate("/login");
                 }
             } finally {
-                setLoading(false); // Stop loading once the data is fetched or an error occurs
+                setLoading(false);
             }
         };
 
@@ -58,7 +59,7 @@ const HotelDetails = () => {
     return (
         <main className="flex flex-col items-start">
             {/* Hotel Image */}
-            <img className="w-full md:h-full" src={hotelData?.pictureUrls[0]} alt={hotelData?.name} />
+            <img className="w-full md:h-full" src={hotelData?.pictureUrls[0] ?  hotelData?.pictureUrls[0] :image1 } alt={hotelData?.name} />
 
             {/* Hotel Name */}
             <p className="text-2xl md:text-3xl font-bold font-sans p-2">{hotelData?.name}</p>
@@ -68,7 +69,7 @@ const HotelDetails = () => {
 
             {/* Hotel State */}
             <p className="text-xl font-sans px-2">
-                <span className="text-xl md:text-2xl font-bold">State:</span> {hotelData?.state}
+                <span className="text-xl md:text-2xl font-bold">State:</span> {hotelData?.location}
             </p>
 
             {/* Hotel City */}
@@ -86,7 +87,7 @@ const HotelDetails = () => {
                 </div>
             ) : (
 
-                <div className="flex flex-wrap justify-center gap-8 md:gap-22 px-4 py-6">
+                <div className="w-[100%] flex flex-wrap justify-center gap-8 md:gap-22 px-4 py-6">
                     {
                         rooms.length > 0 ? rooms.map((room) => (
                                 <RoomCard key={room.id} data={room} />

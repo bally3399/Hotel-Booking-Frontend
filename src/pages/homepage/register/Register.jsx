@@ -46,7 +46,7 @@ const RegisterAdmin = () => {
         if (!validateForm()) return;
         setIsLoading(true);
 
-        const endpoint = "https://hotel-booking-management-backend.onrender.com/api/v1/admin/register";
+        const endpoint = "https://hotel-booking-management-backend.onrender.com/api/v1/users/register";
 
         try {
             const payload = {

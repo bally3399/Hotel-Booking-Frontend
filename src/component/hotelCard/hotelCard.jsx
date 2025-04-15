@@ -21,7 +21,7 @@ const HotelCard = ({ data, onClick }) => {
             {/* State */}
             <p className="text-xl font-sans px-2">
                 <span className="text-2xl font-bold">State: </span>
-                {data?.state}
+                {data?.location}
             </p>
 
             {/* City */}

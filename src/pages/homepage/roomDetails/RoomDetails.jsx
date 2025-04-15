@@ -14,7 +14,7 @@ const RoomBookingPage = () => {
     };
     const navigate = useNavigate();
     const handlePay = () =>{
-        navigate("/payment",{location:{price:price}})
+        navigate("/payment",{state:{price:price}})
     }
     const renderImages = () => {
         const   images  = roomData;

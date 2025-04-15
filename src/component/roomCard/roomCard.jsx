@@ -1,13 +1,11 @@
 import React from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import RoomDetails from "../../pages/homepage/roomDetails/RoomDetails.jsx";
-import RoomBookingPage from "../../pages/homepage/roomDetails/RoomDetails.jsx";
-import roomCardData from "./roomCardData.js";
+
 import {useNavigate} from "react-router-dom";
 import {FaShower, FaTv, FaWifi} from "react-icons/fa";
 
-const RoomCard = ({ data,index }) => {
+const RoomCard = ({ data}) => {
     const navigate = useNavigate();
     const handleBookRoom = () => {
         if (!data?.available) {
@@ -21,25 +19,26 @@ const RoomCard = ({ data,index }) => {
                 draggable: true,
             });
         } else {
-            const slicedData = roomCardData.slice(4, 9).map((item) => item.img);
-            const selectedRoom = roomCardData.find(data => data.id === index-1);
-            // console.log(selectedRoom);
-            navigate("/roomDetails", { location: { roomData: slicedData,price: selectedRoom?.price,type: selectedRoom?.type} });
+            const slicedData = data?.pictureUrls;
+            console.log(slicedData)
+            const selectedRoom = data;
+             console.log(selectedRoom);
+            navigate("/roomDetails", { state: { roomData: slicedData,price: selectedRoom?.price,type: selectedRoom?.roomType} });
         }
     };
 
     return (
-        <main className="flex flex-col items-start gap-3 md:w-[20%] w-[98%] mt-4 rounded-3xl shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-2 bg-white pb-5">
+        <main className="flex flex-col items-start gap-3 md:w-[25%] w-[98%] mt-4 rounded-3xl shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-2 bg-white pb-5">
             <div className="rounded-t-3xl overflow-hidden">
                 <img
                     className="w-full h-[280px] object-cover"
-                    src={data?.img}
+                    src={data?.pictureUrls[0]}
                     alt={"rooms"}
                 />
             </div>
             <p className="text-md font-semibold font-sans px-2">
                 <span className="text-2xl font-semibold">Type:</span>&nbsp;&nbsp;
-                {data?.type}
+                {data?.roomType}
             </p>
             <p className="text-md font-semibold font-sans px-2">
                 <span className="text-2xl font-semibold">Price:</span>&nbsp;&nbsp;
