@@ -72,7 +72,7 @@ const Login = () => {
                 if (role === 'ADMIN') {
                     navigate('/admin-dashboard');
                 } else {
-                    navigate('/add-room');
+                    navigate('/user-dashboard');
                 }
             }
         } catch (error) {
