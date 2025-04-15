@@ -25,37 +25,6 @@ const EditRoom = () => {
     };
 
 
-    useEffect(() => {
-
-        const handleRoomAvailability = async (e) => {
-            e.preventDefault();
-            setIsLoading(true);
-            const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbl9zdGV2ZSIsInJvbGVzIjpbIlJPTEVfUk9MRV9BRE1JTiJdLCJpYXQiOjE3NDEwMjIwMjIsImV4cCI6MTc0MTAzOTg4OX0.tU44OuaHMwFRGw71B1j8NuUZhj6u8CxR-o2vzznK0enUp8PALJfOeovosTWnoNHDFKJGPmXdabES2KK1iraJoQ";
-    
-            try {
-                const response = await axios.get("http://hotel-api.fortunaelibrary-api.com/api/v1/rooms/hotel/1/available", null, {
-                    headers: { 
-                        "Content-Type": "application/json", 
-                        Authorization: `Bearer ${token}`
-                    },
-                });
-    
-                if (response.status === 200) {
-                    response.data = "True" ? setIsAvailable(true) : setIsAvailable(false)
-                    toast.success("Room Available!", { position: "top-right", autoClose: 3000 });
-                } else {
-                    toast.error("Failed to add room. Try again.");
-                }
-            } catch (error) {
-                toast.error("Error adding room. Please try again.");
-            } finally {
-                setIsLoading(false);
-            }
-        }
-
-        handleRoomAvailability();
-    }, [])
-
 
     const handleEdit = async (e) => {
         e.preventDefault();
@@ -110,34 +79,6 @@ const EditRoom = () => {
             navigate("/rooms");
         }
     };
-
-    // const handleRoomAvailability = async (e) => {
-    //     e.preventDefault();
-    //     setIsLoading(true);
-    //     const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbl9zdGV2ZSIsInJvbGVzIjpbIlJPTEVfUk9MRV9BRE1JTiJdLCJpYXQiOjE3NDEwMjIwMjIsImV4cCI6MTc0MTAzOTg4OX0.tU44OuaHMwFRGw71B1j8NuUZhj6u8CxR-o2vzznK0enUp8PALJfOeovosTWnoNHDFKJGPmXdabES2KK1iraJoQ";
-
-    //     try {
-    //         const response = await axios.get("http://hotel-api.fortunaelibrary-api.com/api/v1/rooms/hotel/1/available", null, {
-    //             headers: { 
-    //                 "Content-Type": "application/json", 
-    //                 Authorization: `Bearer ${token}`
-    //             },
-    //         });
-
-    //         if (response.status === 200) {
-    //             response.data = "True" ? setIsAvailable(true) : setIsAvailable(false) 
-    //             toast.success("Room Available!", { position: "top-right", autoClose: 3000 });
-    //         } else {
-    //             toast.error("Failed to add room. Try again.");
-    //         }
-    //     } catch (error) {
-    //         toast.error("Error adding room. Please try again.");
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
-
 
 
     return (

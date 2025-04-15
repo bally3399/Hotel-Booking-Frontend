@@ -1,0 +1,63 @@
+/* src/components/AvailableRooms.module.css */
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    color: #a47a47;
+    cursor: pointer;
+    margin: 1rem;
+    font-size: 1.1rem;
+}
+
+.backButton:hover {
+    color: #8c6239;
+}
+
+.roomList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.roomCard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fff;
+}
+
+.roomImage {
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .roomImage {
+        max-width: 150px;
+    }
+}

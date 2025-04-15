@@ -10,12 +10,6 @@ const ListOfHotelPage = () => {
     const [loading, setLoading] = useState(true);
 
 
-    // const isAuthenticated = () => {
-    //     const token = localStorage.getItem("token") ||
-    //         "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtYXZlcmlja3NfaHViIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNzQ0NzA4NzA1fQ.BySqJjDt7NxtaUPKIn6AXwPpNpnF5qEssnA7u5vf4I5to8bydOIZ8Mgb7eh9Ntf7C0SEPjjVsFcxmEqEUnJ8Tw";
-    //     return !!token;
-    // };
-
     useEffect(() => {
         const fetchHotels = async () => {
             try {
@@ -48,9 +42,10 @@ const ListOfHotelPage = () => {
         fetchHotels();
     }, [navigate]);
 
-    const onClick = (hotelData) => {
-        navigate("/hotel_details", { state: { hotelData: hotelData } });
-    };
+
+    const  onClick  = (hotelData)=>{
+        navigate("/hotel_details", { location: {hotelData: hotelData } })
+    }
 
     return (
         <div className="flex flex-wrap justify-center gap-6 px-4 py-6">

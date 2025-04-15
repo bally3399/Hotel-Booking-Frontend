@@ -24,7 +24,7 @@ const RoomCard = ({ data,index }) => {
             const slicedData = roomCardData.slice(4, 9).map((item) => item.img);
             const selectedRoom = roomCardData.find(data => data.id === index-1);
             // console.log(selectedRoom);
-            navigate("/roomDetails", { state: { roomData: slicedData,price: selectedRoom?.price,type: selectedRoom?.type} });
+            navigate("/roomDetails", { location: { roomData: slicedData,price: selectedRoom?.price,type: selectedRoom?.type} });
         }
     };
 
