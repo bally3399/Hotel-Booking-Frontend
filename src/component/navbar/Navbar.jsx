@@ -2,15 +2,23 @@ import styles from "./Navbar.module.css";
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
+import {jwtDecode} from "jwt-decode";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    let role = null;
     const menuRef = useRef();
-    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if(token) {
+        const decodedToken = jwtDecode(token);
+        role = decodedToken.roles[0];
+    }
+    let path = "/";
+    if(role) path = role === "ADMIN" ? "/admin-dashboard" : "/user-dashboard"
     const navLinks = [
-        { path: user ?"/user-dashboard" :"/", label: "Home" },
+        { path: path, label: "Home" },
         { path: "/tour", label: "Explore" },
         { path: "/about", label: "About" },
         { path: "/contact", label: "Contact" },
@@ -18,6 +26,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         setIsOpen(false);
+        localStorage.clear();
         navigate("/login");
     };
 
@@ -83,9 +92,9 @@ const Navbar = () => {
                 {isPublicPage ? (
                     <button
                         className={styles.getStarted}
-                        onClick={() => navigate("/create-booking")}
+                        onClick={handleLogout}
                     >
-                        Book now
+                        Log out
                     </button>
                 ) : (
                     <button className={styles.getStarted} onClick={handleLogout}>
