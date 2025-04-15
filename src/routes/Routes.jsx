@@ -33,6 +33,7 @@ import FilterRoomByTypePage from "../pages/homepage/filterRoomByType/FilterRoomB
 import DeleteRoomByIdPage from "../pages/homepage/deleteRoomById/DeleteRoomById.jsx";
 import GetHotelsByLocationPage from "../pages/homepage/getHotelsByLocation/GetHotelsByLocation.jsx";
 import AvailableRooms from "../pages/homepage/availableRoom/AvailableRoom.jsx";
+import GetTotalHotelsByLocationPage from "../pages/homepage/getTotalHotelsByLocation/GetTotalHotelsByLocation.jsx";
 
 
 
@@ -55,7 +56,7 @@ export const ROUTES = [
 
             {
                 path: "/admin/register",
-                element: <RegisterAdmin/>,
+                element: <RegisterAdmin/>
             },
 
             {
@@ -88,6 +89,11 @@ export const ROUTES = [
             {
                 path: "/user-dashboard",
                 element: <UserDashboard/>,
+            },
+
+            {
+                path: "/get-total-hotels-by-location",
+                element: <GetTotalHotelsByLocationPage/>
             },
 
             {
