@@ -20,7 +20,7 @@ const ListOfHotelPage = () => {
                 // }
 
 
-                const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJtYXZlcmlja3NfaHViIiwicm9sZXMiOlsiQURNSU4iXSwiZXhwIjoxNzQ0NzA4NzA1fQ.BySqJjDt7NxtaUPKIn6AXwPpNpnF5qEssnA7u5vf4I5to8bydOIZ8Mgb7eh9Ntf7C0SEPjjVsFcxmEqEUnJ8Tw";
+                const token = localStorage.getItem("token");
                 const response = await axios.get("https://hotel-booking-management-backend.onrender.com/api/v1/hotel/hotels/", {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ const ListOfHotelPage = () => {
 
 
     const  onClick  = (hotelData)=>{
-        navigate("/hotel_details", { location: {hotelData: hotelData } })
+        navigate("/hotel_details", { state: {hotelData: hotelData } })
     }
 
     return (

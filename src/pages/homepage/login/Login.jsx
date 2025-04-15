@@ -50,6 +50,7 @@ const Login = () => {
             const { success, data } = parsedResponse;
             console.log(parsedResponse)
             if (!success || !data?.jwtToken) {
+                toast.error('Authentication failed or token missing')
                 throw new Error('Authentication failed or token missing');
             }
 
@@ -71,7 +72,7 @@ const Login = () => {
 
                 if (role === 'ADMIN') {
                     navigate('/admin-dashboard');
-                } else {
+                } else if (role === 'USER') {
                     navigate('/user-dashboard');
                 }
             }
