@@ -8,9 +8,9 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const menuRef = useRef();
-
+    const user = localStorage.getItem("user");
     const navLinks = [
-        { path: "/", label: "Home" },
+        { path: user ?"/user-dashboard" :"/", label: "Home" },
         { path: "/tour", label: "Explore" },
         { path: "/about", label: "About" },
         { path: "/contact", label: "Contact" },
