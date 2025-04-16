@@ -1,8 +1,11 @@
+// src/components/GetHotelByIdPage.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
 import styles from "./GetHotelById.module.css";
 import { HiArrowLeft } from "react-icons/hi";
+import ModalHotelCard from "../../../component/modal/modalHotelCard.jsx";
+import Modal from "../../../component/modal/model.jsx";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
@@ -11,10 +14,21 @@ const GetHotelByIdPage = () => {
     const [formData, setFormData] = useState({ id: "" });
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [hotel, setHotel] = useState(null); // Single hotel, not array
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setHotel(null);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const onClick = (hotelData) => {
+        navigate("/hotel_details", { state: { hotelData } });
     };
 
     const inputStyles = {
@@ -30,33 +44,45 @@ const GetHotelByIdPage = () => {
         e.preventDefault();
         setMessage("");
         setLoading(true);
+        setHotel(null);
 
         const token = localStorage.getItem("token");
+        console.log("Token:", token);
         if (!token) {
             setMessage("Unauthorized: No token found.");
             setLoading(false);
             return;
         }
 
-        if (!formData.id) {
+        if (!formData.id.trim()) {
             setMessage("Please enter a Hotel ID.");
             setLoading(false);
             return;
         }
 
+        const hotelId = formData.id.trim();
+        console.log("Fetching hotel ID:", hotelId);
         try {
-            const response = await fetch(`${API_URL}/api/v1/admin/hotels/${formData.id}`, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await fetch(`${API_URL}/api/v1/admin/hotels/${hotelId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
             });
-            if (response.status === 200) {
-                const data = await response.json();
-                navigate("/hotel_details", { state: {hotelData: data } });
+
+            console.log("Response status:", response.status);
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+
+            if (response.ok) {
+                setHotel(responseData.data || null);
+                setIsModalOpen(true);
             } else {
-                setMessage("Failed to fetch hotel.");
+                setMessage(responseData.message || `Failed to fetch hotel (Status: ${response.status})`);
             }
         } catch (error) {
             console.error("Error fetching hotel by ID:", error);
-            setMessage("Failed to fetch hotel.");
+            setMessage("Failed to fetch hotel. Please check your connection or try again.");
         } finally {
             setLoading(false);
         }
@@ -99,6 +125,15 @@ const GetHotelByIdPage = () => {
                     </div>
                 </form>
             </div>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <div className="max-h-120 overflow-y-auto w-full flex flex-wrap items-center justify-center">
+                    {hotel ? (
+                        <ModalHotelCard data={hotel} onClick={() => onClick(hotel)} />
+                    ) : (
+                        <p className="text-center text-gray-600">No hotel found.</p>
+                    )}
+                </div>
+            </Modal>
         </main>
     );
 };
