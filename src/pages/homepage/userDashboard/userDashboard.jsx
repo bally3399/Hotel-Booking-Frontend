@@ -10,7 +10,7 @@ const Dashboard = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchBy, setSearchBy] = useState("hotelName");
     const [searchResults, setSearchResults] = useState([]);
-    const [showModal, setShowModal] = useState(false); // State to control the modal
+    const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -38,8 +38,8 @@ const Dashboard = () => {
             const data = response.data.data;
             const normalizedResults = Array.isArray(data) ? data : [data];
             setSearchResults(normalizedResults);
-            setShowModal(true); // Open the modal
-            setError(""); // Clear any previous errors
+            setShowModal(true);
+            setError("");
         } catch (err) {
             console.error("Search error:", err);
             setSearchResults([]);
