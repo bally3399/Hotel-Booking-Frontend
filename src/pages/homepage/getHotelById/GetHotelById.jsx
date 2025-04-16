@@ -50,7 +50,7 @@ const GetHotelByIdPage = () => {
             });
             if (response.status === 200) {
                 const data = await response.json();
-                navigate("/rooms", { location: { hotel: data } });
+                navigate("/hotel_details", { state: {hotelData: data } });
             } else {
                 setMessage("Failed to fetch hotel.");
             }
