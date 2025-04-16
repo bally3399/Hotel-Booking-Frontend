@@ -1,0 +1,88 @@
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.message {
+    color: #d32f2f;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    color: #a47a47;
+    cursor: pointer;
+    margin: 1rem;
+    font-size: 1.1rem;
+}
+
+.backButton:hover {
+    color: #8c6239;
+}
+
+.submitButtonWrapper {
+    margin-top: 1.5rem;
+}
+
+.submitButton {
+    background-color: #a47a47 !important;
+    color: white !important;
+    padding: 12px !important;
+    font-weight: bold !important;
+}
+
+.submitButton:hover {
+    background-color: #8c6239 !important;
+}
+
+.submitButton:disabled {
+    background-color: #cccccc !important;
+}
+
+.result {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+    margin: 2rem 0;
+}
+
+.hotelList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.hotelCard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fff;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .result {
+        font-size: 1rem;
+    }
+}

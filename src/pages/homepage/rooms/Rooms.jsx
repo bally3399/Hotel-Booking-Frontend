@@ -5,7 +5,7 @@ import Scroll from "../../../assets/scroll down.png";
 import Image from "../../../assets/rooms.png";
 import { FaShower, FaTv, FaWifi } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import ListOfHotel from "../listOfHotel/ListOfHotel.jsx";
+import ListOfHotelPage from "../listOfHotel/ListOfHotel.jsx";
 
 
 const rooms = [
@@ -113,7 +113,7 @@ const RoomsPage = () => {
                     style={{ cursor: "pointer" }}
                 />
             </div>
-            <ListOfHotel/>
+            <ListOfHotelPage/>
         </main>
     );
 };
