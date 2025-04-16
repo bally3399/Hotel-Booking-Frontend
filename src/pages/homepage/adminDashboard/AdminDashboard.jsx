@@ -55,12 +55,19 @@ const AdminDashboard = () => {
                         Create Hotel
                     </button>
                     <button
-                        onClick={() => navigate("/get-total-hotels-by-location")}
+                        onClick={() => navigate("/delete-room-by-id")}
                         className={styles.actionButton}
                         disabled={loading}
                     >
-                        Total Hotels By Location
+                        Delete Room By Id
                     </button>
+                    {/*<button*/}
+                    {/*    onClick={() => navigate("/get-total-hotels-by-location")}*/}
+                    {/*    className={styles.actionButton}*/}
+                    {/*    disabled={loading}*/}
+                    {/*>*/}
+                    {/*    Total Hotels By Location*/}
+                    {/*</button>*/}
                 </div>
 
                 <div className={styles.buttonRow}>
@@ -97,19 +104,19 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className={styles.buttonRow}>
-                    <button
-                        onClick={() => navigate("/view")}
-                        className={styles.actionButton}
-                    >
-                        Get Most Booked Hotel By Location
-                    </button>
-                    <button
-                        onClick={() => navigate("/find-all-available-rooms")}
-                        className={styles.actionButton}
-                        disabled={loading}
-                    >
-                        Find All Available Hotel Rooms
-                    </button>
+                    {/*<button*/}
+                    {/*    onClick={() => navigate("/view")}*/}
+                    {/*    className={styles.actionButton}*/}
+                    {/*>*/}
+                    {/*    Get Most Booked Hotel By Location*/}
+                    {/*</button>*/}
+                    {/*<button*/}
+                    {/*    onClick={() => navigate("/find-all-available-rooms")}*/}
+                    {/*    className={styles.actionButton}*/}
+                    {/*    disabled={loading}*/}
+                    {/*>*/}
+                    {/*    Find All Available Hotel Rooms*/}
+                    {/*</button>*/}
                     {/*<button*/}
                     {/*    onClick={() => navigate("/deactivate-room-by-hotel-id")}*/}
                     {/*    className={styles.actionButton}*/}
@@ -184,13 +191,13 @@ const AdminDashboard = () => {
                     {/*>*/}
                     {/*    Find All Hotels*/}
                     {/*</button>*/}
-                    <button
-                        onClick={() => navigate("/delete-room-by-id")}
-                        className={styles.actionButton}
-                        disabled={loading}
-                    >
-                        Delete Room By Id
-                    </button>
+                    {/*<button*/}
+                    {/*    onClick={() => navigate("/delete-room-by-id")}*/}
+                    {/*    className={styles.actionButton}*/}
+                    {/*    disabled={loading}*/}
+                    {/*>*/}
+                    {/*    Delete Room By Id*/}
+                    {/*</button>*/}
                 </div>
             </div>
         </main>

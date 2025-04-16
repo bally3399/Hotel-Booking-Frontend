@@ -1,25 +1,26 @@
-// src/components/GetHotelByIdPage.js
+// src/components/GetTotalHotelsByLocationPage.js (With Count)
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
-import styles from "./GetHotelById.module.css";
+import styles from "./GetTotalHotelsByLocation.module.css";
 import { HiArrowLeft } from "react-icons/hi";
 import ModalHotelCard from "../../../component/modal/modalHotelCard.jsx";
 import Modal from "../../../component/modal/model.jsx";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
-const GetHotelByIdPage = () => {
+const GetTotalHotelsByLocationPage = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({ id: "" });
+    const [formData, setFormData] = useState({ location: "" });
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [hotel, setHotel] = useState(null); // Single hotel, not array
+    const [hotels, setHotels] = useState([]);
+    const [totalHotels, setTotalHotels] = useState(null);
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setHotel(null);
+        setHotels([]);
     };
 
     const handleChange = (e) => {
@@ -44,7 +45,8 @@ const GetHotelByIdPage = () => {
         e.preventDefault();
         setMessage("");
         setLoading(true);
-        setHotel(null);
+        setHotels([]);
+        setTotalHotels(null);
 
         const token = localStorage.getItem("token");
         console.log("Token:", token);
@@ -54,35 +56,58 @@ const GetHotelByIdPage = () => {
             return;
         }
 
-        if (!formData.id.trim()) {
-            setMessage("Please enter a Hotel ID.");
+        if (!formData.location.trim()) {
+            setMessage("Please enter a location.");
             setLoading(false);
             return;
         }
 
-        const hotelId = formData.id.trim();
-        console.log("Fetching hotel ID:", hotelId);
+        const location = formData.location.trim();
+        console.log("Fetching hotels for location:", location);
         try {
-            const response = await fetch(`${API_URL}/api/v1/admin/hotels/${hotelId}`, {
+            // Fetch hotel list
+            const hotelsResponse = await fetch(`${API_URL}/api/v1/admin/hotels?location=${encodeURIComponent(location)}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
             });
 
-            console.log("Response status:", response.status);
-            const responseData = await response.json();
-            console.log("Response data:", responseData);
+            console.log("Hotels response status:", hotelsResponse.status);
+            const hotelsData = await hotelsResponse.json();
+            console.log("Hotels response data:", hotelsData);
 
-            if (response.ok) {
-                setHotel(responseData.data || null);
+            if (!hotelsResponse.ok) {
+                setMessage(hotelsData.message || `Failed to fetch hotels (Status: ${hotelsResponse.status})`);
+                setLoading(false);
+                return;
+            }
+
+            // Fetch count (optional)
+            const countResponse = await fetch(`${API_URL}/api/v1/admin/count?location=${encodeURIComponent(location)}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Count response status:", countResponse.status);
+            const countData = await countResponse.json();
+            console.log("Count response data:", countData);
+
+            if (countResponse.ok) {
+                setTotalHotels(countData.data || 0);
+                setHotels(hotelsData.data || []);
                 setIsModalOpen(true);
             } else {
-                setMessage(responseData.message || `Failed to fetch hotel (Status: ${response.status})`);
+                setMessage(countData.message || `Failed to fetch hotel count (Status: ${countResponse.status})`);
+                setHotels(hotelsData.data || []);
+                setIsModalOpen(true);
             }
         } catch (error) {
-            console.error("Error fetching hotel by ID:", error);
-            setMessage("Failed to fetch hotel. Please check your connection or try again.");
+            console.error("Error fetching hotels:", error);
+            setMessage("Failed to fetch hotels. Please check your connection or try again.");
         } finally {
             setLoading(false);
         }
@@ -97,14 +122,13 @@ const GetHotelByIdPage = () => {
                 <HiArrowLeft className="mr-2" /> Back
             </div>
             <div className={styles.container}>
-                <h2>Get Hotel By ID</h2>
+                <h2>Hotels By Location</h2>
                 {message && <p className={styles.message}>{message}</p>}
                 <form onSubmit={handleSubmit}>
                     <TextField
-                        label="Hotel ID"
-                        name="id"
-                        type="number"
-                        value={formData.id}
+                        label="Location"
+                        name="location"
+                        value={formData.location}
                         onChange={handleChange}
                         fullWidth
                         required
@@ -120,17 +144,24 @@ const GetHotelByIdPage = () => {
                             fullWidth
                             disabled={loading}
                         >
-                            {loading ? "Fetching..." : "Get Hotel"}
+                            {loading ? "Fetching..." : "Get Hotels"}
                         </Button>
                     </div>
                 </form>
+                {totalHotels !== null && (
+                    <p className={styles.result}>
+                        There {totalHotels === 1 ? "is" : "are"} <strong>{totalHotels}</strong> hotel{totalHotels !== 1 ? "s" : ""} in {formData.location}.
+                    </p>
+                )}
             </div>
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <div className="max-h-120 overflow-y-auto w-full flex flex-wrap items-center justify-center">
-                    {hotel ? (
-                        <ModalHotelCard data={hotel} onClick={() => onClick(hotel)} />
+                    {hotels.length === 0 ? (
+                        <p className="text-center text-gray-600">No hotels found for this location.</p>
                     ) : (
-                        <p className="text-center text-gray-600">No hotel found.</p>
+                        hotels.map((hotel) => (
+                            <ModalHotelCard key={hotel.id} data={hotel} onClick={() => onClick(hotel)} />
+                        ))
                     )}
                 </div>
             </Modal>
@@ -138,4 +169,4 @@ const GetHotelByIdPage = () => {
     );
 };
 
-export default GetHotelByIdPage;
+export default GetTotalHotelsByLocationPage;
