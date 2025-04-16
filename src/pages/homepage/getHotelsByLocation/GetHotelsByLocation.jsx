@@ -1,9 +1,13 @@
-// src/components/GetHotelsByLocationPage.js
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
 import styles from "../getHotelById/GetHotelById.module.css";
 import { HiArrowLeft } from "react-icons/hi";
+
+
+import Modal from "../../../component/modal/model.jsx"
+import ModalHotelCard from "../../../component/modal/modalHotelCard.jsx";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
@@ -12,6 +16,8 @@ const GetHotelsByLocationPage = () => {
     const [formData, setFormData] = useState({ location: "" });
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [hotels, setHotels] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -49,9 +55,11 @@ const GetHotelsByLocationPage = () => {
             const response = await fetch(`${API_URL}/api/v1/admin/hotels/state/${formData.location}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
+
             if (response.status === 200) {
                 const data = await response.json();
-                navigate("/roomDetails", { location: { hotels: data } });
+                setHotels(data.data || []);
+                setIsModalOpen(true);
             } else {
                 setMessage("Failed to fetch hotels.");
             }
@@ -63,6 +71,14 @@ const GetHotelsByLocationPage = () => {
         }
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const onClick = (hotelData) => {
+        navigate("/hotel_details", { state: { hotelData: hotelData } });
+    };
+
     return (
         <main>
             <div
@@ -71,6 +87,7 @@ const GetHotelsByLocationPage = () => {
             >
                 <HiArrowLeft className="mr-2" /> Back
             </div>
+
             <div className={styles.container}>
                 <h2>Get Hotels By Location</h2>
                 {message && <p className={styles.message}>{message}</p>}
@@ -99,6 +116,19 @@ const GetHotelsByLocationPage = () => {
                     </div>
                 </form>
             </div>
+
+            {/* Modal to Display Fetched Hotels */}
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <div className="max-h-120 overflow-y-auto w-full flex flex-wrap items-center justify-center ">
+                    {hotels.length === 0 ? (
+                        <p className="text-center text-gray-600">No hotels found for this location.</p>
+                    ) : (
+                        hotels.map((hotel) => (
+                            <ModalHotelCard data={hotel} onClick={() => onClick(hotel)} />
+                        ))
+                    )}
+                </div>
+            </Modal>
         </main>
     );
 };
