@@ -36,7 +36,7 @@ const HeroPage = () => {
                         Every moment feels like the first time in paradise
                     </p>
                     <div className={styles.buttonContainer}>
-                        <a href="/rooms" className={styles.bookNow}>
+                        <a href="/hotels" className={styles.bookNow}>
                             Book now
                         </a>
                         <a href="/tour" className={styles.takeTour}>
