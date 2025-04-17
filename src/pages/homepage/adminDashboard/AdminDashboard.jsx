@@ -59,7 +59,7 @@ const AdminDashboard = () => {
                         className={styles.actionButton}
                         disabled={loading}
                     >
-                        Delete Room By Id
+                        Delete Room
                     </button>
                     {/*<button*/}
                     {/*    onClick={() => navigate("/get-total-hotels-by-location")}*/}
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
                         className={styles.actionButton}
                         disabled={loading}
                     >
-                        Get Hotels By Location
+                        Find Hotels By Location
                     </button>
                     <button
                         onClick={() => navigate("/add-room")}
@@ -92,14 +92,14 @@ const AdminDashboard = () => {
                         className={styles.actionButton}
                         disabled={loading}
                     >
-                        Get Hotel By Id
+                        Find Hotel
                     </button>
                     <button
                         onClick={() => navigate("/delete-hotel-by-id")}
                         className={styles.actionButton}
                         disabled={loading}
                     >
-                        Delete Hotel By Id
+                        Delete Hotel
                     </button>
                 </div>
 
