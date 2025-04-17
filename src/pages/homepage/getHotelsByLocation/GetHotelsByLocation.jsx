@@ -1,15 +1,42 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Autocomplete } from "@mui/material";
 import styles from "../getHotelById/GetHotelById.module.css";
 import { HiArrowLeft } from "react-icons/hi";
-
-
-import Modal from "../../../component/modal/model.jsx"
+import Modal from "../../../component/modal/model.jsx";
 import ModalHotelCard from "../../../component/modal/modalHotelCard.jsx";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
+
+const LOCATIONS = [
+    "ABERDEEN",
+    "BELFAST",
+    "BIRMINGHAM",
+    "BRIGHTON",
+    "BRISTOL",
+    "CAMBRIDGE",
+    "CARDIFF",
+    "DERRY",
+    "DUNDEE",
+    "EDINBURGH",
+    "GLASGOW",
+    "INVERNESS",
+    "LEEDS",
+    "LISBURN",
+    "LIVERPOOL",
+    "LONDON",
+    "MANCHESTER",
+    "NEWCASTLE_UPON_TYNE",
+    "NEWPORT",
+    "NOTTINGHAM",
+    "OXFORD",
+    "READING",
+    "SHEFFIELD",
+    "SOUTHAMPTON",
+    "SWANSEA",
+    "WREXHAM",
+    "YORK",
+];
 
 const GetHotelsByLocationPage = () => {
     const navigate = useNavigate();
@@ -19,9 +46,9 @@ const GetHotelsByLocationPage = () => {
     const [hotels, setHotels] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+    const handleChange = (event, value) => {
+        // Update formData with selected or typed value
+        setFormData((prev) => ({ ...prev, location: value || "" }));
     };
 
     const inputStyles = {
@@ -37,35 +64,47 @@ const GetHotelsByLocationPage = () => {
         e.preventDefault();
         setMessage("");
         setLoading(true);
+        setHotels([]);
 
         const token = localStorage.getItem("token");
+        console.log("Token:", token);
         if (!token) {
             setMessage("Unauthorized: No token found.");
             setLoading(false);
             return;
         }
 
-        if (!formData.location) {
-            setMessage("Please enter a state.");
+        if (!formData.location.trim()) {
+            setMessage("Please enter or select a location.");
             setLoading(false);
             return;
         }
 
+        const normalizedLocation = formData.location.trim().toUpperCase();
+        console.log("Fetching hotels for location:", normalizedLocation);
+
         try {
-            const response = await fetch(`${API_URL}/api/v1/admin/hotels/state/${formData.location}`, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await fetch(`${API_URL}/api/v1/admin/hotels/state/${encodeURIComponent(normalizedLocation)}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
             });
 
-            if (response.status === 200) {
-                const data = await response.json();
-                setHotels(data.data || []);
+            console.log("Response status:", response.status);
+            const responseData = await response.json();
+            console.log("Response data:", responseData);
+
+            if (response.ok) {
+                setHotels(responseData.data || []);
                 setIsModalOpen(true);
             } else {
-                setMessage("Failed to fetch hotels.");
+                setMessage(responseData.message || `Failed to fetch hotels (Status: ${response.status})`);
             }
         } catch (error) {
             console.error("Error fetching hotels by location:", error);
-            setMessage("Failed to fetch hotels.");
+            setMessage("Failed to fetch hotels. Please check your connection or try again.");
         } finally {
             setLoading(false);
         }
@@ -73,10 +112,11 @@ const GetHotelsByLocationPage = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
+        setHotels([]);
     };
 
     const onClick = (hotelData) => {
-        navigate("/hotel_details", { state: { hotelData: hotelData } });
+        navigate("/hotel_details", { state: { hotelData } });
     };
 
     return (
@@ -92,16 +132,23 @@ const GetHotelsByLocationPage = () => {
                 <h2>Get Hotels By Location</h2>
                 {message && <p className={styles.message}>{message}</p>}
                 <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Location"
-                        name="location"
+                    <Autocomplete
+                        freeSolo
+                        options={LOCATIONS}
                         value={formData.location}
                         onChange={handleChange}
-                        fullWidth
-                        required
-                        margin="normal"
-                        sx={inputStyles}
-                        disabled={loading}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Location"
+                                name="location"
+                                fullWidth
+                                required
+                                margin="normal"
+                                sx={inputStyles}
+                                disabled={loading}
+                            />
+                        )}
                     />
                     <div className={styles.submitButtonWrapper}>
                         <Button
@@ -119,12 +166,12 @@ const GetHotelsByLocationPage = () => {
 
             {/* Modal to Display Fetched Hotels */}
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <div className="max-h-120 overflow-y-auto w-full flex flex-wrap items-center justify-center ">
+                <div className="max-h-120 overflow-y-auto w-full flex flex-wrap items-center justify-center">
                     {hotels.length === 0 ? (
                         <p className="text-center text-gray-600">No hotels found for this location.</p>
                     ) : (
                         hotels.map((hotel) => (
-                            <ModalHotelCard data={hotel} onClick={() => onClick(hotel)} />
+                            <ModalHotelCard key={hotel.id} data={hotel} onClick={() => onClick(hotel)} />
                         ))
                     )}
                 </div>
