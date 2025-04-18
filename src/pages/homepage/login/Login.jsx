@@ -63,6 +63,7 @@ const Login = () => {
                 localStorage.setItem('token', token);
 
                 const decodedToken = jwtDecode(token);
+                console.log(decodedToken)
                 const role = decodedToken.roles[0];
 
                 toast.success(`Welcome ${form.email}, you have logged in successfully!`, {

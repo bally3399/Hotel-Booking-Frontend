@@ -26,7 +26,7 @@ const RoomCard = ({ data}) => {
             console.log(slicedData)
             const selectedRoom = data;
              console.log(selectedRoom);
-            navigate("/roomDetails", { state: { roomData: slicedData,price: selectedRoom?.price,type: selectedRoom?.roomType} });
+            navigate("/roomDetails", { state: { roomData: slicedData,room:selectedRoom} });
         }
     };
 
@@ -34,7 +34,7 @@ const RoomCard = ({ data}) => {
         <main className="flex flex-col items-start gap-3 md:w-[25%] w-[98%] mt-4 rounded-3xl shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-2 bg-white pb-5">
             <div className="rounded-t-3xl overflow-hidden">
                 <img
-                    className="w-full h-[280px] object-cover"
+                    className="w-[400px] h-[280px] object-cover"
                     src={data?.pictureUrls[0]}
                     alt={"rooms"}
                 />
