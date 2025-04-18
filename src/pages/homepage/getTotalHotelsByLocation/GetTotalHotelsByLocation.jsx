@@ -65,7 +65,6 @@ const GetTotalHotelsByLocationPage = () => {
         const location = formData.location.trim();
         console.log("Fetching hotels for location:", location);
         try {
-            // Fetch hotel list
             const hotelsResponse = await fetch(`${API_URL}/api/v1/admin/hotels?location=${encodeURIComponent(location)}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
