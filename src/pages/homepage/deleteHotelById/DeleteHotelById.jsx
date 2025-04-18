@@ -9,7 +9,7 @@ const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
 const DeleteHotelByIdPage = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({ id: "" });
+    const [formData, setFormData] = useState({ name: "" });
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -39,14 +39,14 @@ const DeleteHotelByIdPage = () => {
             return;
         }
 
-        if (!formData.id) {
-            setMessage("Please enter a Hotel ID.");
+        if (!formData.name) {
+            setMessage("Please enter a Hotel Name.");
             setLoading(false);
             return;
         }
 
         try {
-            const response = await fetch(`${API_URL}/api/v1/admin/hotels/${formData.id}`, {
+            const response = await fetch(`${API_URL}/api/v1/admin/hotels/${formData.name}`, {
                 method: "DELETE",
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -73,14 +73,14 @@ const DeleteHotelByIdPage = () => {
                 <HiArrowLeft className="mr-2" /> Back
             </div>
             <div className={styles.container}>
-                <h2>Delete Hotel By ID</h2>
+                <h2>Delete Hotel With Name</h2>
                 {message && <p className={message.includes("successfully") ? styles.success : styles.message}>{message}</p>}
                 <form onSubmit={handleSubmit}>
                     <TextField
-                        label="Hotel ID"
-                        name="id"
-                        type="number"
-                        value={formData.id}
+                        label="Hotel Name"
+                        name="name"
+                        type="text"
+                        value={formData.name}
                         onChange={handleChange}
                         fullWidth
                         required

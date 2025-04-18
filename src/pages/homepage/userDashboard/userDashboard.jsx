@@ -19,17 +19,24 @@ const Dashboard = () => {
     }, []);
 
     const handleSearch = async () => {
-        if (searchQuery.trim() === "") return;
+        // Trim and normalize the search query to uppercase
+        const normalizedQuery = searchQuery.trim().toUpperCase();
+        if (normalizedQuery === "") return;
 
         let url = "";
         if (searchBy === "hotelName") {
-            url = `https://hotel-booking-management-backend.onrender.com/api/v1/hotel/${encodeURIComponent(searchQuery)}`;
+            url = `https://hotel-booking-management-backend.onrender.com/api/v1/hotel/${encodeURIComponent(normalizedQuery)}`;
         } else if (searchBy === "location") {
-            url = `https://hotel-booking-management-backend.onrender.com/api/v1/hotel/location/${encodeURIComponent(searchQuery)}`;
+            url = `https://hotel-booking-management-backend.onrender.com/api/v1/hotel/location/${encodeURIComponent(normalizedQuery)}`;
         }
 
         try {
             const token = localStorage.getItem("token");
+            if (!token) {
+                setError("Unauthorized: No token found.");
+                return;
+            }
+
             const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -111,7 +118,11 @@ const Dashboard = () => {
                         <p className="text-center text-gray-600">No results found.</p>
                     ) : (
                         searchResults.map((hotel) => (
-                            <ModalHotelCard data={hotel} onClick={() => onClick(hotel)} />
+                            <ModalHotelCard
+                                key={hotel.id}
+                                data={hotel}
+                                onClick={() => onClick(hotel)}
+                            />
                         ))
                     )}
                 </div>

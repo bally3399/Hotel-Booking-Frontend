@@ -9,12 +9,10 @@ import styles from "./BookRoom.module.css";
 
 const BookRoomPage = () => {
     const [form, setForm] = useState({
-        userId: "",
-        hotelId: "",
-        roomId: "",
+        hotelName: "",
+        roomType: "",
         startDate: "",
         endDate: "",
-        isPaid: true,
         agree: false,
         role: ""
     });
@@ -36,9 +34,8 @@ const BookRoomPage = () => {
         setIsLoading(true);
         try {
             const payload = {
-                userId: form.userId,
-                hotelId: form.hotelId,
-                roomId: form.roomId,
+                hotelName: form.hotelName,
+                roomType: form.roomType,
                 role: form.role,
                 startDate: new Date(form.startDate).toISOString(),
                 endDate: new Date(form.endDate).toISOString(),
@@ -72,9 +69,9 @@ const BookRoomPage = () => {
                 <h2 className={styles.roomTitle}>Book Room</h2>
                 <form onSubmit={handleSubmit}>
                     <TextField
-                        label="User Id"
-                        name="userId"
-                        value={form.userId}
+                        label="Room Type"
+                        name="roomType"
+                        value={form.roomType}
                         onChange={handleChange}
                         fullWidth
                         className={styles.formField}
@@ -89,26 +86,9 @@ const BookRoomPage = () => {
                         }}
                     />
                     <TextField
-                        label="Hotel Id"
-                        name="hotelId"
-                        value={form.hotelId}
-                        onChange={handleChange}
-                        fullWidth
-                        className={styles.formField}
-                        sx={{
-                            "& label.Mui-focused": { color: "#a68b5b" },
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "black" },
-                                "&:hover fieldset": { borderColor: "#a68b5b" },
-                                "&.Mui-focused fieldset": { borderColor: "#a68b5b" },
-                            },
-                            marginBottom: "16px",
-                        }}
-                    />
-                    <TextField
-                        label="Room Id"
-                        name="roomId"
-                        value={form.roomId}
+                        label="Hotel Name"
+                        name="hotel Name"
+                        value={form.hotelName}
                         onChange={handleChange}
                         fullWidth
                         className={styles.formField}

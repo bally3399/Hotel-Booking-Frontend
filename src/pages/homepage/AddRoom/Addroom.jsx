@@ -11,13 +11,13 @@ const API_URL = "https://hotel-booking-management-backend.onrender.com";
 const AddRoom = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const hotelIdFromState = location.state?.hotel?.id;
+    const hotelNameFromState = location.state?.hotel?.name;
 
     const [roomData, setRoomData] = useState({
         roomType: "SINGLE",
         price: "",
         isAvailable: "NOT AVAILABLE",
-        hotelId: hotelIdFromState || "",
+        hotelName: hotelNameFromState || "",
         pictures: [],
     });
 
@@ -25,7 +25,6 @@ const AddRoom = () => {
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
 
-    // Cloudinary Upload Widget setup
     const cloudinaryRef = useRef();
     const widgetRef = useRef();
 
@@ -116,6 +115,7 @@ const AddRoom = () => {
         setLoading(true);
 
         const token = localStorage.getItem("token");
+        console.log("Token:", token);
         if (!token) {
             setMessage("Unauthorized: No token found.");
             setLoading(false);
@@ -130,7 +130,14 @@ const AddRoom = () => {
                 return;
             }
         } catch (error) {
+            console.error("Token decode error:", error);
             setMessage("Invalid token.");
+            setLoading(false);
+            return;
+        }
+
+        if (!roomData.hotelName.trim()) {
+            setMessage("Please enter a hotel name.");
             setLoading(false);
             return;
         }
@@ -139,9 +146,11 @@ const AddRoom = () => {
             roomType: roomData.roomType,
             price: roomData.price ? parseFloat(roomData.price) : 0,
             isAvailable: roomData.isAvailable === "AVAILABLE",
-            hotelId: roomData.hotelId,
+            hotelName: roomData.hotelName.trim(),
             pictures: roomData.pictures,
         };
+
+        console.log("Submitting payload:", payload);
 
         try {
             const response = await axios.post(
@@ -156,16 +165,18 @@ const AddRoom = () => {
                 }
             );
 
+            console.log("Response:", response.data);
             setMessage("Room added successfully!");
             setRoomData({
                 roomType: "SINGLE",
                 price: "",
                 isAvailable: "NOT AVAILABLE",
-                hotelId: hotelIdFromState,
+                hotelName: hotelNameFromState || "",
                 pictures: [],
             });
             navigate("/rooms");
         } catch (error) {
+            console.error("Add room error:", error);
             setMessage(`Failed to add room: ${error.response?.data?.message || error.message}`);
         } finally {
             setLoading(false);
@@ -226,10 +237,10 @@ const AddRoom = () => {
                         </Select>
                     </FormControl>
                     <TextField
-                        label="Hotel ID"
-                        name="hotelId"
-                        type="number"
-                        value={roomData.hotelId}
+                        label="Hotel Name"
+                        name="hotelName"
+                        type="text"
+                        value={roomData.hotelName}
                         onChange={handleChange}
                         fullWidth
                         required
