@@ -1,23 +1,75 @@
-import React from "react";
-import BookedRoomData from "./bookedRoom.js"; // Assuming this is an array of booked room data
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import NotFoundPage from "../../../component/notFound/notFoundPage.jsx";
 import RoomCard from "../../../component/roomCard/roomCard.jsx";
 
 const BookedRoom = () => {
+    const [bookedRooms, setBookedRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user.id;
+    console.log(user)
+    useEffect(() => {
+        const fetchBookedRooms = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await axios.get(
+                    `https://hotel-booking-management-backend.onrender.com/api/v1/bookings/${userId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                setBookedRooms(response.data.data);
+            } catch (err) {
+                console.error("Error fetching booked rooms:", err);
+                setError("Failed to fetch booked rooms. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBookedRooms();
+    }, []);
+
+    if (loading) {
+        return (
+            <main className="flex flex-col items-center p-8 min-h-screen bg-gray-100">
+                <p className="self-center text-3xl font-bold text-[#7c6a46] font-sans">
+                    Booked Rooms
+                </p>
+                <p className="mt-4 text-lg text-gray-600">Loading...</p> {/* Show loading message */}
+            </main>
+        );
+    }
+
+    if (error) {
+        return (
+            <main className="flex flex-col items-center p-8 min-h-screen bg-gray-100">
+                <p className="self-center text-3xl font-bold text-[#7c6a46] font-sans">
+                    Booked Rooms
+                </p>
+                <p className="mt-4 text-lg text-red-500">{error}</p> {/* Show error message */}
+            </main>
+        );
+    }
+
     return (
         <main className="flex flex-col items-center p-8 min-h-screen bg-gray-100">
             <p className="self-center text-3xl font-bold text-[#7c6a46] font-sans">
                 Booked Rooms
             </p>
-            {/* Conditional Rendering */}
-            {BookedRoomData.length > 0 ? (
+            {bookedRooms.length > 0 ? (
                 <div className="flex flex-wrap gap-6 w-full justify-evenly">
-                    {BookedRoomData.map((room) => (
+                    {bookedRooms.map((room) => (
                         <RoomCard data={room} key={room.id} index={room.id} />
                     ))}
                 </div>
             ) : (
-                <NotFoundPage text="No Rooms Booked Yet" emoji={'🥲'}/>
+                <NotFoundPage text="No Rooms Booked Yet" emoji={'🥲'} />
             )}
         </main>
     );

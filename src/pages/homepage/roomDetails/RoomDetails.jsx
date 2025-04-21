@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { loadStripe } from "@stripe/stripe-js";
 // import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import axios from "axios"; // Import Axios
-
+import axios from "axios";
 // const stripePromise = loadStripe("your-publishable-key");
-
 // Commented out PaymentForm Component for future use
 // const PaymentForm = ({ amount, price, onPaymentSuccess }) => {
 //     const [loading, setLoading] = useState(false);
@@ -73,24 +71,60 @@ import axios from "axios"; // Import Axios
 //         </form>
 //     );
 // };
-
 const RoomBookingPage = () => {
     const [showAllImages, setShowAllImages] = useState(false);
     const [form, setForm] = useState({ startDate: "", endDate: "" });
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isBooked, setIsBooked] = useState(false); // Track if the room is booked
     const location = useLocation();
     const navigate = useNavigate();
     const { roomData, room } = location.state;
-
     const user = JSON.parse(localStorage.getItem("user"));
     const token = localStorage.getItem("token");
+    console.log(token);
+    console.log(user);
+    useEffect(() => {
+        // Fetch booking details for the room
+        const fetchBookingDetails = async () => {
+            try {
+                const response = await axios.get(
+                    `https://hotel-booking-management-backend.onrender.com/api/v1/bookings/${room.id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                const booking = response.data;
 
-    console.log(room);
+                if (booking && booking.endDate) {
+                    const currentDate = new Date();
+                    const bookingEndDate = new Date(booking.endDate);
+
+                    if (currentDate <= bookingEndDate) {
+                        // Room is booked, set the dates and disable editing
+                        setForm({
+                            startDate: booking.startDate.split("T")[0],
+                            endDate: booking.endDate.split("T")[0],
+                        });
+                        setIsBooked(true);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching booking details:", error);
+                toast.error("Failed to fetch booking details.");
+            }
+        };
+
+        fetchBookingDetails();
+    }, [room.id, token]);
+
     const toggleImageDisplay = () => {
         setShowAllImages(!showAllImages);
     };
 
     const handleChange = (e) => {
+        if (isBooked) return; // Prevent changes if the room is booked
         const { name, value } = e.target;
         setForm((prevForm) => ({
             ...prevForm,
@@ -112,7 +146,6 @@ const RoomBookingPage = () => {
 
     const renderImages = () => {
         const images = roomData;
-
         if (showAllImages) {
             return (
                 <div className="grid grid-cols-1 gap-4">
@@ -133,7 +166,6 @@ const RoomBookingPage = () => {
                 </div>
             );
         }
-
         if (images.length === 2) {
             return (
                 <div className="grid grid-cols-2 gap-4">
@@ -148,10 +180,8 @@ const RoomBookingPage = () => {
                 </div>
             );
         }
-
         if (images.length >= 3) {
             const otherImagesCount = images.length - 2;
-
             return (
                 <div className="w-full grid grid-cols-2 gap-4 h-[18rem] md:h-full">
                     <img
@@ -175,16 +205,15 @@ const RoomBookingPage = () => {
                                 className="w-full h-full object-cover rounded-lg brightness-50"
                             />
                             <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-white text-4xl font-bold">
-                  +{otherImagesCount}
-                </span>
+                                <span className="text-white text-4xl font-bold">
+                                    +{otherImagesCount}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             );
         }
-
         return null;
     };
 
@@ -198,24 +227,20 @@ const RoomBookingPage = () => {
 
     const handlePaymentSuccess = async () => {
         try {
-
             await axios.post(
                 "https://hotel-booking-management-backend.onrender.com/api/v1/bookings/book",
                 payload,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-            }
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
-
             toast.success("Room booked successfully!");
-
-
             navigate("/user-dashboard");
         } catch (error) {
             console.error("Error booking room:", error);
-            toast.error("Failed to book room. Please try again." + {error});
+            toast.error("Failed to book room. Please try again." + { error });
         }
     };
 
@@ -224,7 +249,6 @@ const RoomBookingPage = () => {
             <div className="w-full bg-white rounded-lg shadow-lg p-6 mb-8">
                 {renderImages()}
             </div>
-
             <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-6">
                 <p className="text-md font-semibold font-sans px-2 mb-4">
                     <span className="text-2xl font-semibold">Type:</span>&nbsp;&nbsp;
@@ -234,7 +258,6 @@ const RoomBookingPage = () => {
                     <span className="text-2xl font-semibold">Price:</span>&nbsp;&nbsp;
                     £{room?.price}
                 </p>
-
                 {/* Check In and Check Out Fields */}
                 <div className="mb-4">
                     <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
@@ -246,10 +269,10 @@ const RoomBookingPage = () => {
                         name="startDate"
                         value={form.startDate}
                         onChange={handleChange}
+                        disabled={isBooked} // Disable if the room is booked
                         className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-[#a68b5b]"
                     />
                 </div>
-
                 <div className="mb-4">
                     <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-2">
                         Check Out
@@ -260,25 +283,24 @@ const RoomBookingPage = () => {
                         name="endDate"
                         value={form.endDate}
                         onChange={handleChange}
+                        disabled={isBooked} // Disable if the room is booked
                         className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-[#a68b5b]"
                     />
                 </div>
-
                 {/* Book Room Button */}
                 <button
                     className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
                     onClick={handleBookRoom}
+                    disabled={isBooked}
                 >
                     Book Room
                 </button>
-
                 {isModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white w-[90%] md:w-[40%] p-6 border-2 border-[#a68b5b] rounded-2xl">
                             <p className="text-2xl text-[#a68b5b] self-center font-bold font-sans mb-4">
                                 Make Payment
                             </p>
-
                             {/* Mock Payment Form */}
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -291,7 +313,6 @@ const RoomBookingPage = () => {
                                     className="w-full p-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed"
                                 />
                             </div>
-
                             <div className="grid grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -316,7 +337,6 @@ const RoomBookingPage = () => {
                                     />
                                 </div>
                             </div>
-
                             {/* Pay Button */}
                             <button
                                 className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors w-full"
@@ -324,7 +344,6 @@ const RoomBookingPage = () => {
                             >
                                 Pay £{room?.price}
                             </button>
-
                             <button
                                 className="mt-4 bg-red-500 self-center text-white py-2 px-4 rounded hover:bg-red-600 transition-colors w-full"
                                 onClick={closeModal}
@@ -335,7 +354,6 @@ const RoomBookingPage = () => {
                     </div>
                 )}
             </div>
-
             <ToastContainer />
         </div>
     );

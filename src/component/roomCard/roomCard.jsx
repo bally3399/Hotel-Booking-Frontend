@@ -1,32 +1,51 @@
 import React from "react";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {FaShower, FaTv, FaWifi} from "react-icons/fa";
+import axios from "axios";
 
-const RoomCard = ({ data}) => {
+const RoomCard = ({ data }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const isBookedRoomPage = location.pathname.includes("bookedRoom");
+
     const handleBookRoom = () => {
-        if(!localStorage.getItem("token")){
-            toast.error("You are not Logged in so you cant book room. Please Log in to book room!");
-            return
+        if (!localStorage.getItem("token")) {
+            toast.error("You are not Logged in so you can't book room. Please Log in to book room!");
+            return;
         }
         if (!data?.available) {
             toast.error("This room is not available for booking!", {
                 position: "top-right",
                 autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
             });
         } else {
             const slicedData = data?.pictureUrls;
-            console.log(slicedData)
-            const selectedRoom = data;
-             console.log(selectedRoom);
-            navigate("/roomDetails", { state: { roomData: slicedData,room:selectedRoom} });
+            navigate("/roomDetails", { state: { roomData: slicedData, room: data } });
+        }
+    };
+
+    const handleCancelBooking = async () => {
+        try {
+            const user = localStorage.getItem("user");
+            const userId = user.id;
+            const bookingId = data?.id;
+
+            if (!userId || !bookingId) {
+                toast.error("User ID or Booking ID is missing.");
+                return;
+            }
+
+             const response = await axios.delete(
+                `https://hotel-booking-management-backend.onrender.com/api/v1/bookings/cancel/${bookingId}?userId=${userId}`
+                );
+            if(response.status === 200) toast.success("Booking cancelled successfully!");
+            else toast.error(response.data);
+
+        } catch (error) {
+            toast.error(error);
+            console.error(error);
         }
     };
 
@@ -57,20 +76,19 @@ const RoomCard = ({ data}) => {
             </p>
             <div className="flex items-center justify-between w-full px-3">
                 <div className="flex gap-8">
-                    <FaTv/>
-                    <FaShower/>
-                    <FaWifi/>
+                    <FaTv />
+                    <FaShower />
+                    <FaWifi />
                 </div>
                 <button
-                    className={`bg-[#7c6a46] text-white rounded-3xl py-2 px-6 hover:-translate-y-1 transition duration-300 self-center ${
-                        !data?.available && "cursor-not-allowed opacity-70"
-                    }`}
-                    onClick={handleBookRoom}
+                    className={`${
+                        isBookedRoomPage ? "bg-red-500" : "bg-[#7c6a46]"
+                    } text-white rounded-3xl py-2 px-6 hover:-translate-y-1 transition duration-300 self-center`}
+                    onClick={isBookedRoomPage ? handleCancelBooking : handleBookRoom}
                 >
-                    Book Room
+                    {isBookedRoomPage ? "Cancel Booking" : "Book Room"}
                 </button>
             </div>
-
         </main>
     );
 };
