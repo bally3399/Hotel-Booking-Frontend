@@ -65,7 +65,7 @@ const Dashboard = () => {
     };
 
     const handleOnClick = () => {
-        navigate("/bookedRoom");
+        navigate("/user-booked");
     };
 
     return (

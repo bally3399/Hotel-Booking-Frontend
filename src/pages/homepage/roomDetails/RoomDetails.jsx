@@ -1,88 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { loadStripe } from "@stripe/stripe-js";
-// import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
-// const stripePromise = loadStripe("your-publishable-key");
-// Commented out PaymentForm Component for future use
-// const PaymentForm = ({ amount, price, onPaymentSuccess }) => {
-//     const [loading, setLoading] = useState(false);
-//     const stripe = useStripe();
-//     const elements = useElements();
-//     const handleSubmit = async (event) => {
-//         event.preventDefault();
-//         if (!stripe || !elements) {
-//             return;
-//         }
-//         setLoading(true);
-//         try {
-//             const response = await axios.post("http://localhost:5000/api/create-payment-intent", {
-//                 amount,
-//             });
-//             const { clientSecret } = response.data;
-//             const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-//                 payment_method: {
-//                     card: elements.getElement(CardElement),
-//                 },
-//             });
-//             if (error) {
-//                 throw new Error(error.message);
-//             }
-//             if (paymentIntent.status === "succeeded") {
-//                 onPaymentSuccess();
-//                 toast.success("Room booked successfully!");
-//             }
-//         } catch (err) {
-//             console.error(err);
-//             toast.error("Payment failed. Please try again.");
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-//     return (
-//         <form onSubmit={handleSubmit}>
-//             <CardElement
-//                 options={{
-//                     style: {
-//                         base: {
-//                             fontSize: "16px",
-//                             color: "#424770",
-//                             "::placeholder": {
-//                                 color: "#aab7c4",
-//                             },
-//                         },
-//                         invalid: {
-//                             color: "#9e2146",
-//                         },
-//                     },
-//                 }}
-//             />
-//             <button
-//                 type="submit"
-//                 disabled={!stripe || loading}
-//                 className={`mt-4 bg-blue-500 text-white py-2 px-4 rounded transition-colors ${
-//                     !stripe ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
-//                 }`}
-//             >
-//                 {loading ? "Processing..." : "Pay £" + price}
-//             </button>
-//         </form>
-//     );
-// };
+
 const RoomBookingPage = () => {
     const [showAllImages, setShowAllImages] = useState(false);
     const [form, setForm] = useState({ startDate: "", endDate: "" });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isBooked, setIsBooked] = useState(false); // Track if the room is booked
+    const [loading, setLoading] = useState(false); // Track loading state for the Pay button
     const location = useLocation();
     const navigate = useNavigate();
     const { roomData, room } = location.state;
     const user = JSON.parse(localStorage.getItem("user"));
     const token = localStorage.getItem("token");
-    console.log(token);
-    console.log(user);
+
     useEffect(() => {
         // Fetch booking details for the room
         const fetchBookingDetails = async () => {
@@ -146,6 +79,7 @@ const RoomBookingPage = () => {
 
     const renderImages = () => {
         const images = roomData;
+
         if (showAllImages) {
             return (
                 <div className="grid grid-cols-1 gap-4">
@@ -166,6 +100,7 @@ const RoomBookingPage = () => {
                 </div>
             );
         }
+
         if (images.length === 2) {
             return (
                 <div className="grid grid-cols-2 gap-4">
@@ -180,6 +115,7 @@ const RoomBookingPage = () => {
                 </div>
             );
         }
+
         if (images.length >= 3) {
             const otherImagesCount = images.length - 2;
             return (
@@ -226,6 +162,7 @@ const RoomBookingPage = () => {
     };
 
     const handlePaymentSuccess = async () => {
+        setLoading(true); // Start loading
         try {
             await axios.post(
                 "https://hotel-booking-management-backend.onrender.com/api/v1/bookings/book",
@@ -240,7 +177,9 @@ const RoomBookingPage = () => {
             navigate("/user-dashboard");
         } catch (error) {
             console.error("Error booking room:", error);
-            toast.error("Failed to book room. Please try again." + { error });
+            toast.error("Failed to book room. Please try again.");
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
@@ -339,10 +278,13 @@ const RoomBookingPage = () => {
                             </div>
                             {/* Pay Button */}
                             <button
-                                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors w-full"
+                                className={`bg-blue-500 text-white py-2 px-4 rounded transition-colors w-full ${
+                                    loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+                                }`}
                                 onClick={handlePaymentSuccess}
+                                disabled={loading} // Disable button during loading
                             >
-                                Pay £{room?.price}
+                                {loading ? "Processing..." : `Pay £${room?.price}`}
                             </button>
                             <button
                                 className="mt-4 bg-red-500 self-center text-white py-2 px-4 rounded hover:bg-red-600 transition-colors w-full"
