@@ -37,7 +37,6 @@ const Login = () => {
                 form,
                 { headers: { 'Content-Type': 'application/json' } }
             );
-            console.log(response.data)
             console.log(typeof response.data)
 
             let rawResponse = response.data;
@@ -55,14 +54,17 @@ const Login = () => {
             }
 
             const token = data.jwtToken;
-            localStorage.setItem('token', token);
 
+            localStorage.setItem('token', token);
+            localStorage.setItem('user',JSON.stringify(data.user));
+            console.log(JSON.parse(localStorage.getItem("user")))
             if (success) {
                 const token = data.jwtToken;
                 console.log("This is my token", token)
                 localStorage.setItem('token', token);
 
                 const decodedToken = jwtDecode(token);
+                console.log(decodedToken)
                 const role = decodedToken.roles[0];
 
                 toast.success(`Welcome ${form.email}, you have logged in successfully!`, {
