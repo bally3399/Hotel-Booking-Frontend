@@ -34,6 +34,7 @@ import DeleteRoomByIdPage from "../pages/homepage/deleteRoomById/DeleteRoomById.
 import GetHotelsByLocationPage from "../pages/homepage/getHotelsByLocation/GetHotelsByLocation.jsx";
 import AvailableRooms from "../pages/homepage/availableRoom/AvailableRoom.jsx";
 import GetTotalHotelsByLocationPage from "../pages/homepage/getTotalHotelsByLocation/GetTotalHotelsByLocation.jsx";
+import UserBookedRoom from "../pages/homepage/roomDetails/userBookedRoom.jsx";
 
 
 
@@ -108,6 +109,10 @@ export const ROUTES = [
             {
                 path: "/about",
                 element: <About/>,
+            },
+            {
+                path: "/user-booked",
+                element: <UserBookedRoom/>,
             },
             {
                 path: "/bookedRoom",
