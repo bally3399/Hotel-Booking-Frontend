@@ -1,4 +1,3 @@
-// src/components/GetHotelByIdPage.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
@@ -6,30 +5,17 @@ import styles from "./GetHotelById.module.css";
 import { HiArrowLeft } from "react-icons/hi";
 import ModalHotelCard from "../../../component/modal/modalHotelCard.jsx";
 import Modal from "../../../component/modal/model.jsx";
+import axios from "axios";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
 const GetHotelByIdPage = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({ id: "" });
+    const [hotelName, setHotelName] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [hotel, setHotel] = useState(null); // Single hotel, not array
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setHotel(null);
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const onClick = (hotelData) => {
-        navigate("/hotel_details", { state: { hotelData } });
-    };
+    const [hotel, setHotel] = useState(null);
 
     const inputStyles = {
         "& label.Mui-focused": { color: "#a47a47" },
@@ -47,45 +33,55 @@ const GetHotelByIdPage = () => {
         setHotel(null);
 
         const token = localStorage.getItem("token");
-        console.log("Token:", token);
         if (!token) {
             setMessage("Unauthorized: No token found.");
             setLoading(false);
             return;
         }
 
-        if (!formData.id.trim()) {
-            setMessage("Please enter a Hotel ID.");
+        const normalizedQuery = hotelName.trim().toUpperCase();
+        if (!normalizedQuery) {
+            setMessage("Please enter a Hotel Name.");
             setLoading(false);
             return;
         }
 
-        const hotelId = formData.id.trim();
-        console.log("Fetching hotel ID:", hotelId);
         try {
-            const response = await fetch(`${API_URL}/api/v1/admin/hotels/${hotelId}`, {
+            const url = `${API_URL}/api/v1/hotel/${encodeURIComponent(normalizedQuery)}`;
+            const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
                 },
             });
 
-            console.log("Response status:", response.status);
-            const responseData = await response.json();
-            console.log("Response data:", responseData);
+            const data = response.data.data;
+            const normalizedResults = Array.isArray(data) ? data[0] : data;
 
-            if (response.ok) {
-                setHotel(responseData.data || null);
+            if (response.status === 200 && normalizedResults) {
+                setHotel(normalizedResults);
                 setIsModalOpen(true);
+                setMessage("");
             } else {
-                setMessage(responseData.message || `Failed to fetch hotel (Status: ${response.status})`);
+                setMessage("No hotel found with that name");
             }
         } catch (error) {
-            console.error("Error fetching hotel by ID:", error);
-            setMessage("Failed to fetch hotel. Please check your connection or try again.");
+            console.error("Search error:", error);
+            setMessage(
+                error.response?.data.message ||
+                "Failed to fetch hotel. Please try again."
+            );
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleHotelClick = (hotelData) => {
+        navigate("/hotel_details", { state: { hotelData } });
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setHotel(null);
     };
 
     return (
@@ -97,15 +93,13 @@ const GetHotelByIdPage = () => {
                 <HiArrowLeft className="mr-2" /> Back
             </div>
             <div className={styles.container}>
-                <h2>Get Hotel By ID</h2>
+                <h2>Get Hotel By Name</h2>
                 {message && <p className={styles.message}>{message}</p>}
                 <form onSubmit={handleSubmit}>
                     <TextField
-                        label="Hotel ID"
-                        name="id"
-                        type="number"
-                        value={formData.id}
-                        onChange={handleChange}
+                        label="Hotel Name"
+                        value={hotelName}
+                        onChange={(e) => setHotelName(e.target.value)}
                         fullWidth
                         required
                         margin="normal"
@@ -128,7 +122,10 @@ const GetHotelByIdPage = () => {
             <Modal isOpen={isModalOpen} onClose={closeModal}>
                 <div className="max-h-120 overflow-y-auto w-full flex flex-wrap items-center justify-center">
                     {hotel ? (
-                        <ModalHotelCard data={hotel} onClick={() => onClick(hotel)} />
+                        <ModalHotelCard
+                            data={hotel}
+                            onClick={() => handleHotelClick(hotel)}
+                        />
                     ) : (
                         <p className="text-center text-gray-600">No hotel found.</p>
                     )}
