@@ -3,12 +3,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import HotelCard from "../../../component/hotelCard/hotelCard.jsx";
+import {toast} from "react-toastify";
 
 const ListOfHotelPage = () => {
     const navigate = useNavigate();
     const [hotels, setHotels] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         const fetchHotels = async () => {
@@ -20,12 +21,8 @@ const ListOfHotelPage = () => {
                 // }
 
 
-                const token = localStorage.getItem("token");
-                const response = await axios.get("https://hotel-booking-management-backend.onrender.com/api/v1/hotel/hotels/", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+
+                const response = await axios.get("https://hotel-booking-management-backend.onrender.com/api/v1/hotel/hotels/");
                 console.log(response.data.data)
                 setHotels(response.data.data);
             } catch (error) {
@@ -44,6 +41,10 @@ const ListOfHotelPage = () => {
 
 
     const  onClick  = (hotelData)=>{
+        if(!token){
+            toast.warn("You are not logged in please login");
+            navigate('/login');
+        }
         navigate("/hotel_details", { state: {hotelData: hotelData } })
     }
 

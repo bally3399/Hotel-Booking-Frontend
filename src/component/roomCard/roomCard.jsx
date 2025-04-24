@@ -8,7 +8,7 @@ import axios from "axios";
 const RoomCard = ({ data }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const isBookedRoomPage = location.pathname.includes("bookedRoom");
+    const isBookedRoomPage = location.pathname === '/user-booked';
 
     const handleBookRoom = () => {
         if (!localStorage.getItem("token")) {
@@ -72,7 +72,7 @@ const RoomCard = ({ data }) => {
                 }`}
             >
                 <span className="text-2xl font-semibold text-black">Available:</span>
-                &nbsp;&nbsp;{data?.available ? "True" : "False"}
+                &nbsp;&nbsp;{data?.available ? "Available" : "Unavailable"}
             </p>
             <div className="flex items-center justify-between w-full px-3">
                 <div className="flex gap-8">

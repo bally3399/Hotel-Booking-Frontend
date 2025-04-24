@@ -1,5 +1,5 @@
 import Navbar from "../../../component/navbar/Navbar";
-import HeroImage from "../../../assets/homepageImage.png";
+import HeroImage from "../../../assets/img/hotel2.jpg";
 import styles from "./HeroPage.module.css";
 import Image from "../../../assets/makiSwimming0.png"
 import Image2 from "../../../assets/Vector (1).png"
@@ -30,7 +30,7 @@ const HeroPage = () => {
                 <div className={styles.textSection}>
                     <h2 className={styles.subTitle}>Fortunae IT Hotel Booking App</h2>
                     <h1 className={styles.mainTitle}>
-                        Hotel for every moment rich in emotion
+                        Hotel for every moment, rich in emotion
                     </h1>
                     <p className={styles.Description}>
                         Every moment feels like the first time in paradise
@@ -70,7 +70,6 @@ const HeroPage = () => {
             <p className={styles.subtitle}>
                 All rooms are designed for your comfort.
             </p>
-
             <ListOfHotel/>
         </section>
     </main>
