@@ -58,6 +58,7 @@ const HotelDetails = () => {
 
     return (
         <main className="flex flex-col items-start">
+
             {/* Hotel Image */}
             <img className="w-full md:h-[550px] object-cover" src={hotelData?.pictureUrls[0] ?  hotelData?.pictureUrls[0] :image1 } alt={hotelData?.name} />
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./AvailableRooms.module.css";
-import { FaTv, FaPencilAlt, FaWifi } from "react-icons/fa"; // Icons for amenities
+import {HiArrowLeft} from "react-icons/hi";
 
 const AvailableRooms = () => {
     const { state } = useLocation();
@@ -9,13 +9,18 @@ const AvailableRooms = () => {
     const rooms = state?.rooms || [];
 
     const handleBookRoom = (room) => {
-        // Since hotelName is not in the API response, omit it from the message
         alert(`Booking room: ${room.roomType} for £${room.price}`);
         navigate("/book-room", { state: { room } });
     };
 
     return (
         <main className={styles.container}>
+            <div
+                className={styles.backButton}
+                onClick={() => navigate("/admin-dashboard")}
+            >
+                <HiArrowLeft className="mr-2"/> Back
+            </div>
             <h2>Available Rooms</h2>
             {rooms.length === 0 ? (
                 <p>No available rooms found.</p>
