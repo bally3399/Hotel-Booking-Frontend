@@ -1,8 +1,8 @@
 import Footer from "../../../component/footer";
 import Navbar from "../../../component/navbar/Navbar";
 import styles from "./contact.module.css";
-import flag from "../../../assets/emily-wang-P84Q6CTSIT8-unsplash.jpg";
-import street from "../../../assets/sabrina-mazzeo-g-krQzQo9mI-unsplash.jpg";
+import flag from "../../../assets/img/room3.jpg";
+import street from "../../../assets/img/room1.jpeg";
 
 const ContactPage = () => {
     return (

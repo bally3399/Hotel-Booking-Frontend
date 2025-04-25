@@ -40,7 +40,7 @@
 .tourSection {
     margin: 2rem auto;
     padding: 2rem;
-    max-width: 800px;
+    max-width: 98%;
     background: white;
     border-radius: 8px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -49,6 +49,9 @@
 
 .imageWrapper {
     margin: 1rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tourImage {
@@ -91,4 +94,13 @@
 
 .bookingDescription a:hover {
     color: #005f8c;
+}
+
+@media screen and (max-width: 700px) {
+    .heroText{
+        width: 370px;
+    }
+    .title{
+        font-size: 1.6rem;
+    }
 }

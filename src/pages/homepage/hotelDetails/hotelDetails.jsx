@@ -59,7 +59,7 @@ const HotelDetails = () => {
     return (
         <main className="flex flex-col items-start">
             {/* Hotel Image */}
-            <img className="w-full md:h-[750px]" src={hotelData?.pictureUrls[0] ?  hotelData?.pictureUrls[0] :image1 } alt={hotelData?.name} />
+            <img className="w-full md:h-[550px] object-cover" src={hotelData?.pictureUrls[0] ?  hotelData?.pictureUrls[0] :image1 } alt={hotelData?.name} />
 
             {/* Hotel Name */}
             <p className="text-2xl md:text-3xl font-bold font-sans p-2">{hotelData?.name}</p>

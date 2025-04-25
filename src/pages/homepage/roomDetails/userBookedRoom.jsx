@@ -37,10 +37,10 @@ const UserBookedRoom = () => {
                                 }
                             );
                             console.log(roomResponse.data)
-                            return roomResponse.data; // Return the full room details
+                            return roomResponse.data;
                         } catch (err) {
                             console.error(`Error fetching room details for room ID ${roomId}:`, err);
-                            return null; // Skip this room if there's an error
+                            return null;
                         }
                     });
 

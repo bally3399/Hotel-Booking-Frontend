@@ -16,7 +16,7 @@ const Navbar = () => {
         role = decodedToken.roles[0];
     }
     let path = "/";
-    if(role) path = role === "ADMIN" ? "/admin-dashboard" : "/user-dashboard"
+    if(role) path = role === "ADMIN" ? "/admin-dashboard" : "/user-dashboard" ;
     const navLinks = [
         { path: path, label: "Home" },
         { path: "/tour", label: "Explore" },
@@ -47,13 +47,7 @@ const Navbar = () => {
         };
     }, []);
 
-    const isPublicPage =
-        location.pathname !== "/" &&
-        location.pathname !== "/register" &&
-        location.pathname !== "/login" &&
-        location.pathname !== "/about" &&
-        location.pathname !== "/contact" &&
-        location.pathname !== "/tour";
+    const isPublicPage = !!token;
 
 
     return (

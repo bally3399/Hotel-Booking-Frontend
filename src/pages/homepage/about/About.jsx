@@ -1,7 +1,7 @@
 import Navbar from "../../../component/navbar/Navbar";
 import styles from "./About.module.css";
 import Footer from "../../../component/footer";
-import image from "../../../assets/nick-fewings-y66uqwAT8N8-unsplash.jpg";
+import image from "../../../assets/img/room1.jpeg";
 
 const About = () => {
     return (
@@ -10,7 +10,7 @@ const About = () => {
                 <header className={styles.heroSection}>
                     <img src={image} alt="Luxury British Room" className={styles.heroImage} />
                     <div className={styles.heroText}>
-                        <h1 className={styles.title}>Experience British Elegance</h1>
+                        <h1 className={styles.title}>Experience Comfort And Luxury</h1>
                         <p className={styles.subTitle}>
                             Step into a world where luxury meets tradition. Our rooms and suites are thoughtfully designed to blend timeless British charm 
                             with modern comfort. Discover the perfect sanctuary in the heart of the UK.
