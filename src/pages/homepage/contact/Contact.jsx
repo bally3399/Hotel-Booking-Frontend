@@ -36,12 +36,12 @@ const ContactPage = () => {
 
                     <h3 className={styles.emailTitle}>Drop Us an Email</h3>
                     <p className={styles.emailDescription}>
-                        Send us a message at <a href="mailto:hello@britishstay.co.uk">hello@britishstay.co.uk</a>, and we'll respond promptly.
+                        Send us a message via <a style={{color: "brown"}} href="mailto:contact@fortunaeitsolutions.com">contact@fortunaeitsolutions.com</a>,we'll respond promptly.
                     </p>
 
                     <h3 className={styles.visitTitle}>Visit Us</h3>
                     <p className={styles.visitDescription}>
-                        Pop by our office at <strong>221B Baker Street, London</strong>—we'll be glad to welcome you with a warm cuppa!
+                        Manchester, United Kingdom —we'll be glad to welcome you with a warm cuppa!
                     </p>
                 </section>
             </div>

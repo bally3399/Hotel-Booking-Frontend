@@ -32,9 +32,9 @@ import FilterByPriceAndLocationPage from "../pages/homepage/filteredByLocation/F
 import FilterRoomByTypePage from "../pages/homepage/filterRoomByType/FilterRoomByType.jsx";
 import DeleteRoomByIdPage from "../pages/homepage/deleteRoomById/DeleteRoomById.jsx";
 import GetHotelsByLocationPage from "../pages/homepage/getHotelsByLocation/GetHotelsByLocation.jsx";
-import AvailableRooms from "../pages/homepage/availableRoom/AvailableRoom.jsx";
 import GetTotalHotelsByLocationPage from "../pages/homepage/getTotalHotelsByLocation/GetTotalHotelsByLocation.jsx";
 import UserBookedRoom from "../pages/homepage/roomDetails/userBookedRoom.jsx";
+import AvailableRooms from "../pages/homepage/availableRoom/AvailableRoom.jsx";
 
 
 

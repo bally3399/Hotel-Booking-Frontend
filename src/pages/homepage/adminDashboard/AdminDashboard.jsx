@@ -42,6 +42,40 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleCheckRoomAvailability = async () => {
+        setLoading(true);
+
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Unauthorized: No token found.");
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/api/v1/admin/hotel/available`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const responseData = await response.json();
+            if (response.status === 200 && responseData.success) {
+                const rooms = responseData.data || []; // Extract the 'data' array
+                navigate("/available-rooms", { state: { rooms } });
+            } else {
+                alert(responseData.message || "Failed to fetch available rooms.");
+            }
+        } catch (error) {
+            console.error("Error fetching available rooms:", error);
+            alert("Failed to fetch available rooms. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <main>
             <div className={styles.dashboard}>
@@ -61,13 +95,6 @@ const AdminDashboard = () => {
                     >
                         Delete Room
                     </button>
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/get-total-hotels-by-location")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*    disabled={loading}*/}
-                    {/*>*/}
-                    {/*    Total Hotels By Location*/}
-                    {/*</button>*/}
                 </div>
 
                 <div className={styles.buttonRow}>
@@ -104,52 +131,12 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className={styles.buttonRow}>
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/view")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*>*/}
-                    {/*    Get Most Booked Hotel By Location*/}
-                    {/*</button>*/}
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/find-all-available-rooms")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*    disabled={loading}*/}
-                    {/*>*/}
-                    {/*    Find All Available Hotel Rooms*/}
-                    {/*</button>*/}
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/deactivate-room-by-hotel-id")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*    disabled={loading}*/}
-                    {/*>*/}
-                    {/*    Deactivate Room By Hotel Id*/}
-                    {/*</button>*/}
-                </div>
-
-                <div className={styles.buttonRow}>
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/activate-room-by-hotel-id")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*    disabled={loading}*/}
-                    {/*>*/}
-                    {/*    Activate Room By Hotel Id*/}
-                    {/*</button>*/}
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/find-all-available-rooms")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*    disabled={loading}*/}
-                    {/*>*/}
-                    {/*    Find All Available Hotel Rooms*/}
-                    {/*</button>*/}
-                </div>
-
-                <div className={styles.buttonRow}>
                     <button
-                        onClick={() => navigate("/check-room-availability")}
+                        onClick={handleCheckRoomAvailability}
                         className={styles.actionButton}
                         disabled={loading}
                     >
-                        Check If Room Is Available
+                        Available rooms
                     </button>
                     <button
                         onClick={handleFindAllHotels}
@@ -158,46 +145,6 @@ const AdminDashboard = () => {
                     >
                         Find All Hotels
                     </button>
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/edit-room-by-id")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*>*/}
-                    {/*    Edit Room By Id*/}
-                    {/*</button>*/}
-                </div>
-
-                {/*<div className={styles.buttonRow}>*/}
-                {/*    <button*/}
-                {/*        onClick={() => navigate("/filter-by-price-and-location")}*/}
-                {/*        className={styles.actionButton}*/}
-                {/*        disabled={loading}*/}
-                {/*    >*/}
-                {/*        Filter By Price And Location*/}
-                {/*    </button>*/}
-                {/*    <button*/}
-                {/*        onClick={() => navigate("/filter-rooms-by-type")}*/}
-                {/*        className={styles.actionButton}*/}
-                {/*        disabled={loading}*/}
-                {/*    >*/}
-                {/*        Filter Hotel Room By Type*/}
-                {/*    </button>*/}
-                {/*</div>*/}
-
-                <div className={styles.buttonRow}>
-                    {/*<button*/}
-                    {/*    onClick={handleFindAllHotels}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*    disabled={loading}*/}
-                    {/*>*/}
-                    {/*    Find All Hotels*/}
-                    {/*</button>*/}
-                    {/*<button*/}
-                    {/*    onClick={() => navigate("/delete-room-by-id")}*/}
-                    {/*    className={styles.actionButton}*/}
-                    {/*    disabled={loading}*/}
-                    {/*>*/}
-                    {/*    Delete Room By Id*/}
-                    {/*</button>*/}
                 </div>
             </div>
         </main>
