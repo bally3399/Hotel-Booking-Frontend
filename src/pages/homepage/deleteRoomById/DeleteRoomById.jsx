@@ -72,7 +72,7 @@ const DeleteRoomByIdPage = () => {
                 <HiArrowLeft className="mr-2" /> Back
             </div>
             <div className={styles.container}>
-                <h2>Delete Hotel By ID</h2>
+                <h2>Delete Room By ID</h2>
                 {message && <p className={message.includes("successfully") ? styles.success : styles.message}>{message}</p>}
                 <form onSubmit={handleSubmit}>
                     <TextField

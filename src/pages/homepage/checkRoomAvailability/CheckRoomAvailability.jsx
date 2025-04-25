@@ -6,7 +6,7 @@ import { HiArrowLeft } from "react-icons/hi";
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
-const CheckRoomAvailabilityPage = () => {
+const AllRoomsAvailable = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ roomId: "" });
     const [message, setMessage] = useState("");
@@ -104,4 +104,4 @@ const CheckRoomAvailabilityPage = () => {
     );
 };
 
-export default CheckRoomAvailabilityPage;
+export default AllRoomsAvailable;
