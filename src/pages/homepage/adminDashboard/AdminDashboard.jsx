@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./AdminDashboard.module.css";
 import { useState } from "react";
+import { HiArrowLeft } from "react-icons/hi"; // Import the arrow icon
 
 const API_URL = "https://hotel-booking-management-backend.onrender.com";
 
@@ -63,7 +64,7 @@ const AdminDashboard = () => {
 
             const responseData = await response.json();
             if (response.status === 200 && responseData.success) {
-                const rooms = responseData.data || []; // Extract the 'data' array
+                const rooms = responseData.data || [];
                 navigate("/available-rooms", { state: { rooms } });
             } else {
                 alert(responseData.message || "Failed to fetch available rooms.");
@@ -78,6 +79,13 @@ const AdminDashboard = () => {
 
     return (
         <main>
+            <div
+                className={styles.backButton}
+                onClick={() => navigate("/login")}
+            >
+                <HiArrowLeft className="mr-2" /> Back
+            </div>
+
             <div className={styles.dashboard}>
                 {loading && <div className={styles.loading}>Loading...</div>}
 
