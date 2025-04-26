@@ -51,7 +51,7 @@ const FindAllAvailableRoomsPage = () => {
             if (response.status === 200) {
                 const data = await response.json();
                 console.log(data);
-                navigate("/available-rooms", { location: { availableRooms: data } });
+                navigate("/available-rooms", { state: { availableRooms: data } });
             } else {
                 setMessage("Failed to fetch available rooms.");
             }

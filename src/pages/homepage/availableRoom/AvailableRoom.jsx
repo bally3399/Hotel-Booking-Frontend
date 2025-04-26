@@ -1,16 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./AvailableRooms.module.css";
-import {HiArrowLeft} from "react-icons/hi";
+import { HiArrowLeft } from "react-icons/hi";
 
 const AvailableRooms = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
     const rooms = state?.rooms || [];
+    const [loading, setLoading] = useState({});
 
-    const handleBookRoom = (room) => {
-        alert(`Booking room: ${room.roomType} for £${room.price}`);
-        navigate("/book-room", { state: { room } });
+    const handleDeleteRoom = async (roomId) => {
+        setLoading((prevLoading) => ({ ...prevLoading, [roomId]: true }));
+        try {
+            await axios.delete(
+                `https://hotel-booking-management-backend.onrender.com/api/v1/rooms/${roomId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+
+            toast.success("Room deleted successfully!");
+
+            navigate("/admin-dashboard");
+        } catch (error) {
+            console.error("Error deleting room:", error);
+
+            toast.error("Failed to delete room. Please try again.");
+        } finally {
+            setLoading((prevLoading) => ({ ...prevLoading, [roomId]: false }));
+        }
     };
 
     return (
@@ -19,9 +42,11 @@ const AvailableRooms = () => {
                 className={styles.backButton}
                 onClick={() => navigate("/admin-dashboard")}
             >
-                <HiArrowLeft className="mr-2"/> Back
+                <HiArrowLeft className="mr-2" /> Back
             </div>
+
             <h2>Available Rooms</h2>
+
             {rooms.length === 0 ? (
                 <p>No available rooms found.</p>
             ) : (
@@ -40,6 +65,7 @@ const AvailableRooms = () => {
                                 alt={`Room ${room.roomType}`}
                                 className={styles.roomImage}
                             />
+
                             <div className={styles.roomDetails}>
                                 <p><strong>Type:</strong> {room.roomType}</p>
                                 <p><strong>Price:</strong> £{room.price}</p>
@@ -48,10 +74,15 @@ const AvailableRooms = () => {
                                     {room.available ? "Available" : "Not Available"}
                                 </p>
                                 <button
-                                    className={styles.bookButton}
-                                    onClick={() => handleBookRoom(room)}
+                                    className={`bg-red-500 text-white py-2 px-4 rounded transition-colors ${
+                                        loading[room.id]
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : "hover:bg-red-600"
+                                    }`}
+                                    onClick={() => handleDeleteRoom(room.id)} // Pass the room ID to the delete function
+                                    disabled={loading[room.id]} // Disable the button during loading
                                 >
-                                    Book Room
+                                    {loading[room.id] ? "Deleting..." : "Delete Room"}
                                 </button>
                             </div>
                         </div>
