@@ -96,13 +96,6 @@ const AdminDashboard = () => {
                     >
                         Create Hotel
                     </button>
-                    <button
-                        onClick={() => navigate("/delete-room-by-id")}
-                        className={styles.actionButton}
-                        disabled={loading}
-                    >
-                        Delete Room
-                    </button>
                 </div>
 
                 <div className={styles.buttonRow}>
