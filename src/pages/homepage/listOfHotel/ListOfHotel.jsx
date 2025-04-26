@@ -43,14 +43,6 @@ const ListOfHotelPage = () => {
 
     return (
         <div className="px-4 py-6">
-            <div
-                className="flex items-center text-yellow-600 hover:text-yellow-800 cursor-pointer mb-6"
-                onClick={() => navigate(-1)}
-            >
-                <HiArrowLeft className="mr-2 text-lg" />
-                <span className="text-lg font-medium">Back</span>
-            </div>
-
             <div className="flex flex-wrap justify-center gap-6">
                 {loading ? (
                     <div className="flex items-center justify-center min-h-screen">
