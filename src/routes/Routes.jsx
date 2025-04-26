@@ -27,7 +27,6 @@ import DeleteHotelById from "../pages/homepage/deleteHotelById/DeleteHotelById.j
 import DeactivateRoom from "../pages/homepage/deactivateRoom/DeactivateRoom.jsx";
 import ActivateRoom from "../pages/homepage/activateRoom/ActivateRoom.jsx";
 import FindAllAvailableRoomPage from "../pages/homepage/findAllAvailableRooms/FindAllAvailableRoom.jsx";
-import CheckRoomAvailabilityPage from "../pages/homepage/checkRoomAvailability/CheckRoomAvailability.jsx";
 import FilterByPriceAndLocationPage from "../pages/homepage/filteredByLocation/FilteredByLocation.jsx";
 import FilterRoomByTypePage from "../pages/homepage/filterRoomByType/FilterRoomByType.jsx";
 import DeleteRoomByIdPage from "../pages/homepage/deleteRoomById/DeleteRoomById.jsx";
@@ -35,6 +34,7 @@ import GetHotelsByLocationPage from "../pages/homepage/getHotelsByLocation/GetHo
 import GetTotalHotelsByLocationPage from "../pages/homepage/getTotalHotelsByLocation/GetTotalHotelsByLocation.jsx";
 import UserBookedRoom from "../pages/homepage/roomDetails/userBookedRoom.jsx";
 import AvailableRooms from "../pages/homepage/availableRoom/AvailableRoom.jsx";
+import AllRooms from "../pages/homepage/allRooms/AllRoomPage.jsx";
 
 
 
@@ -127,6 +127,10 @@ export const ROUTES = [
                 path: "/available-rooms",
                 element: <AvailableRooms/>,
             },
+            {
+                path: "/all-rooms",
+                element: <AllRooms/>,
+            },
 
             {
                 path: "/hotels",
@@ -188,10 +192,7 @@ export const ROUTES = [
                 path: "/find-all-available-rooms",
                 element: <FindAllAvailableRoomPage/>
             },
-            {
-                path: "/check-room-availability",
-                element: <CheckRoomAvailabilityPage/>
-            },
+
             {
                 path: "filter-by-price-and-location",
                 element: <FilterByPriceAndLocationPage/>
