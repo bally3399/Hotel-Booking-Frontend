@@ -1,4 +1,4 @@
-import HeroImage from "../../../assets/heroImage.png";
+import HeroImage from "../../../assets/heroImage.jpg";
 import styles from "./HeroPage.module.css";
 import Image from "../../../assets/makiSwimming0.png"
 import Image2 from "../../../assets/Vector (1).png"
